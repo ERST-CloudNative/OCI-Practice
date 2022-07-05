@@ -1,4 +1,6 @@
-### 挂载数据盘
+### 数据盘挂载与卸载
+
+##### 数据盘挂载
 
 1. 创建数据盘
 
@@ -205,4 +207,52 @@ tmpfs                      tmpfs      69M     0   69M   0% /run/user/1000
 [root@bootstrap ~]# cat /opt/demo/demo.txt
 123
 ```
+
+##### 数据盘卸载
+
+1. 卸载挂载点
+
+```
+[root@bootstrap ~]# umount /opt/demo
+```
+
+注释掉之前加入/etc/fstab文件中的设备信息，避免再次启动时挂载失败
+
+```
+# /etc/fstab
+
+# UUID=a6587cc9-4a95-413d-a63e-856b1559b1fa /opt/demo            xfs     defaults        0 0
+```
+
+2. 断开iSCSI连接
+
+查看iSCSI命令和信息
+
+![image](https://user-images.githubusercontent.com/4653664/177251735-5f9bc933-d5a9-4456-9f14-3faead250922.png)
+
+
+断开连接
+```
+[root@bootstrap ~]# sudo iscsiadm -m node -T iqn.2015-12.com.oracleiaas:ac526d34-86fc-4148-aafe-191c47c26c1a -p 169.254.2.2:3260 -u
+[root@bootstrap ~]# sudo iscsiadm -m node -o delete -T iqn.2015-12.com.oracleiaas:ac526d34-86fc-4148-aafe-191c47c26c1a -p 169.254.2.2:3260
+```
+
+3. 验证块设备已移除
+
+```
+[root@bootstrap ~]# ls /dev/oracleoci/ -l
+total 0
+lrwxrwxrwx. 1 root root 6 Jul  5 03:29 oraclevda -> ../sda
+lrwxrwxrwx. 1 root root 7 Jul  5 03:29 oraclevda1 -> ../sda1
+lrwxrwxrwx. 1 root root 7 Jul  5 03:29 oraclevda2 -> ../sda2
+lrwxrwxrwx. 1 root root 7 Jul  5 03:29 oraclevda3 -> ../sda3
+```
+
+4. 分离块存储卷资源
+
+![image](https://user-images.githubusercontent.com/4653664/177252403-3a9ced95-d3b5-4848-9a22-58e6b125231e.png)
+
+5. 终止块存储资源
+
+![image](https://user-images.githubusercontent.com/4653664/177252564-498d1d92-a481-4018-8505-4bb624b2dc61.png)
 
