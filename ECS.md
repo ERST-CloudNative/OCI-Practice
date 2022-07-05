@@ -1,3 +1,91 @@
+### 纵向伸缩
+
+##### 扩容CPU/MEM
+
+```
+[root@host-10-0-0-179 ~]# lscpu
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              2
+On-line CPU(s) list: 0,1
+Thread(s) per core:  2
+Core(s) per socket:  1
+Socket(s):           1
+NUMA node(s):        1
+Vendor ID:           GenuineIntel
+BIOS Vendor ID:      QEMU
+CPU family:          6
+Model:               106
+Model name:          Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz
+BIOS Model name:     pc-i440fx-4.2
+Stepping:            6
+CPU MHz:             2593.984
+BogoMIPS:            5187.96
+Virtualization:      VT-x
+Hypervisor vendor:   KVM
+Virtualization type: full
+L1d cache:           32K
+L1i cache:           32K
+L2 cache:            4096K
+L3 cache:            16384K
+NUMA node0 CPU(s):   0,1
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology cpuid tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch cpuid_fault invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves nt_good wbnoinvd arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid md_clear arch_capabilities
+[root@host-10-0-0-179 ~]# free -m
+              total        used        free      shared  buff/cache   available
+Mem:            680         361          50           1         268         212
+Swap:          1360          18        1342
+```
+![image](https://user-images.githubusercontent.com/4653664/177253685-f01b24db-adfc-4e4d-8e9d-bfd2960338c8.png)
+
+![image](https://user-images.githubusercontent.com/4653664/177254302-36022dbe-9eb1-417a-97a0-476857a0b6e7.png)
+
+![image](https://user-images.githubusercontent.com/4653664/177254322-355c2390-e30c-4eda-9d8b-aa3f674f8a10.png)
+
+实例更新后查看操作系统信息
+
+```
+[root@host-10-0-0-179 ~]# lscpu
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              4
+On-line CPU(s) list: 0-3
+Thread(s) per core:  2
+Core(s) per socket:  2
+Socket(s):           1
+NUMA node(s):        1
+Vendor ID:           GenuineIntel
+BIOS Vendor ID:      QEMU
+CPU family:          6
+Model:               106
+Model name:          Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz
+BIOS Model name:     pc-i440fx-4.2
+Stepping:            6
+CPU MHz:             2593.986
+BogoMIPS:            5187.97
+Virtualization:      VT-x
+Hypervisor vendor:   KVM
+Virtualization type: full
+L1d cache:           32K
+L1i cache:           32K
+L2 cache:            4096K
+L3 cache:            16384K
+NUMA node0 CPU(s):   0-3
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology cpuid tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch cpuid_fault invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves nt_good wbnoinvd arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid md_clear arch_capabilities
+
+[root@host-10-0-0-179 ~]# free -m
+              total        used        free      shared  buff/cache   available
+Mem:           3635         366        2750           8         519        3032
+Swap:          1360           0        1360
+
+```
+
+##### 缩容CPU/MEM
+
+
+
+
 ### 数据盘挂载与卸载
 
 ##### 数据盘挂载
