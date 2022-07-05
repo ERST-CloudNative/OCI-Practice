@@ -1,7 +1,7 @@
 
 ### L7 负载均衡实验
 
-1. 配置后端云主机
+##### 1. 配置后端云主机
 
 安装nginx
 ```
@@ -33,13 +33,13 @@ success
 针对实例2，重复以上步骤.
 
 
-2. 增加安全规则
+##### 2. 增加安全规则
 
 这里增加一条安全规则，放开80端口的访问，仅实验临时使用，实验完后即时移出这条安全规则。
 
 ![image](https://user-images.githubusercontent.com/4653664/177256946-5badb721-c89c-4d86-87ad-271fbd56b368.png)
 
-3. 创建L7负载均衡器
+##### 3. 创建L7负载均衡器
 
 ![image](https://user-images.githubusercontent.com/4653664/177260018-55fe27ef-5a4f-4a7b-9d3b-1022c6a88c33.png)
 
@@ -55,7 +55,7 @@ success
 
 ![image](https://user-images.githubusercontent.com/4653664/177260134-465016b4-035e-4252-9d3c-11cac1480bcc.png)
 
-4. 验证
+##### 4. 验证
 
 验证LB已经可以实现对后端NGINX服务的负载均衡
 
@@ -63,7 +63,7 @@ success
 
 ![image](https://user-images.githubusercontent.com/4653664/177260182-f4f05955-0380-4aa3-9952-b0cf48f7b8b5.png)
 
-5. 清理
+##### 5. 清理
 
 终止LB
 
