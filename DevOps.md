@@ -1,13 +1,13 @@
 
 
-1. 创建CICD分区
+### 1. 创建CICD分区
 
 ![image](https://user-images.githubusercontent.com/4653664/177750139-a9787dbb-f6f7-4885-8a3d-ad4b40d0e471.png)
 
 ![image](https://user-images.githubusercontent.com/4653664/177750069-b9fc7464-c18d-445b-a17b-9a4570afd0b7.png)
 
 
-2. 权限配置
+### 2. 权限配置
 
 创建动态组
 
@@ -31,7 +31,7 @@ Allow dynamic-group BuildDynamicGroup to use ons-topics in compartment cicd
 ![image](https://user-images.githubusercontent.com/4653664/177752643-8f2c0a94-1d40-40d1-9210-9b5ff8449d21.png)
 
 
-3. 创建OKE
+### 3. 创建OKE
 
 ![image](https://user-images.githubusercontent.com/4653664/177766950-d0adb5c1-f14d-41a6-ada7-5fbed2fa8b18.png)
 
@@ -47,7 +47,7 @@ Allow dynamic-group BuildDynamicGroup to use ons-topics in compartment cicd
 
 ![image](https://user-images.githubusercontent.com/4653664/177769133-a4474188-cc60-4448-be0a-fa1887aa9991.png)
 
-4. 创建代码仓库
+### 4. 创建代码仓库
 
 ![image](https://user-images.githubusercontent.com/4653664/177764397-d1fa3706-1b1f-4cd0-bc1b-e5f27468d604.png)
 
@@ -65,7 +65,7 @@ https://github.com/oracle-quickstart/oci-devops-node.git
 
 ![image](https://user-images.githubusercontent.com/4653664/177765147-1b0ecd80-604d-4e8c-873c-386ae3e1c483.png)
 
-5. 创建制品仓库
+### 5. 创建制品仓库
 
 由于我们构建的是容器镜像，所以这里我们创建个镜像仓库
 
@@ -75,7 +75,7 @@ https://github.com/oracle-quickstart/oci-devops-node.git
 
 ![image](https://user-images.githubusercontent.com/4653664/177765586-d2fbd182-7160-4b38-83a7-c0073a2ea2d7.png)
 
-6. 创建Build Pipeline
+### 6. 创建Build Pipeline
 
 ![image](https://user-images.githubusercontent.com/4653664/177765744-e87a2309-6374-41b7-83f5-60d594f1cfb2.png)
 
@@ -89,7 +89,7 @@ https://github.com/oracle-quickstart/oci-devops-node.git
 
 ![image](https://user-images.githubusercontent.com/4653664/177765914-96269599-3372-40fd-af9a-8763d3a7fdb7.png)
 
-7. 执行Build Pipeline
+### 7. 执行Build Pipeline
 
 ![image](https://user-images.githubusercontent.com/4653664/177766193-fb2c8b38-ee19-4d1c-afc9-79c7f2f718d0.png)
 
@@ -98,11 +98,11 @@ https://github.com/oracle-quickstart/oci-devops-node.git
 ![image](https://user-images.githubusercontent.com/4653664/177767229-9a095e67-332f-4886-93e5-4f06edff61a6.png)
 
 
-8. 查看Build Pipelines输出的制品
+### 8. 查看Build Pipelines输出的制品
 
 ![image](https://user-images.githubusercontent.com/4653664/177768564-cf84e766-2c4b-40a9-9026-a0c4ed593770.png)
 
-9. 创建环境
+### 9. 创建OKE环境
 
 这里创建一个OKE的开发环境
 
@@ -113,7 +113,9 @@ https://github.com/oracle-quickstart/oci-devops-node.git
 ![image](https://user-images.githubusercontent.com/4653664/177768938-188c4b10-e92b-47c5-b46d-7acad2f3f05b.png)
 
 
-20 准备kubernetes 
+### 10. 准备Kubernetes manifest制品
+
+创建Kubernetes manifest制品仓库
 
 ![image](https://user-images.githubusercontent.com/4653664/177772461-8544ba3d-6282-46f8-8f67-bdbc17e99fa8.png)
 
@@ -167,8 +169,9 @@ spec:
 
 ```
 
-![image](https://user-images.githubusercontent.com/4653664/177774238-6fb49450-93d0-4a67-af87-b174f7898b71.png)
+添加制品到DevOps项目中
 
+![image](https://user-images.githubusercontent.com/4653664/177774238-6fb49450-93d0-4a67-af87-b174f7898b71.png)
 
 ![image](https://user-images.githubusercontent.com/4653664/177774347-851108ee-6128-45d6-b956-50bec4fabba4.png)
 
@@ -176,11 +179,7 @@ spec:
 
 
 
-20. 创建Deployment pipeline
-
-
-
-
+### 11. 创建Deployment pipeline
 
 ![image](https://user-images.githubusercontent.com/4653664/177769310-354cfcca-6421-4789-a2a6-88a6f4104ddf.png)
 
@@ -192,6 +191,8 @@ spec:
 
 ![image](https://user-images.githubusercontent.com/4653664/177774653-c5530da3-945b-4826-ac4d-02df3e5ece27.png)
 
+
+
 ![image](https://user-images.githubusercontent.com/4653664/177774723-b697917a-2e20-4a3f-9409-4da9fc454e39.png)
 
 ![image](https://user-images.githubusercontent.com/4653664/177774839-42a42615-3fe2-4358-a51e-abf1084e89ec.png)
@@ -199,7 +200,11 @@ spec:
 
 ![image](https://user-images.githubusercontent.com/4653664/177774985-52f82780-7781-46e0-86c6-4c29899b6ad4.png)
 
-![image](https://user-images.githubusercontent.com/4653664/177775040-60f7f404-29ba-44cd-923d-782dfbd55c20.png)
+### 12. 执行Deployment pipeline
+
+![image](https://user-images.githubusercontent.com/4653664/177776058-139a1b1a-8100-440a-9eb0-9bb9cc98de3a.png)
+
+> 由于Kubernetes manifest中声明了变量，这里需要传递相应的参数
 
 ![image](https://user-images.githubusercontent.com/4653664/177775813-92e9e17f-5f94-45e4-a492-f1714f9e96af.png)
 
