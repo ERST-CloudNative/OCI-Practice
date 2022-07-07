@@ -208,4 +208,10 @@ spec:
 
 ![image](https://user-images.githubusercontent.com/4653664/177775813-92e9e17f-5f94-45e4-a492-f1714f9e96af.png)
 
+### 13. 验证部署结果
+
+![image](https://user-images.githubusercontent.com/4653664/177778558-6c7d1a15-91e2-45b5-b80a-e8d745495733.png)
+
+![image](https://user-images.githubusercontent.com/4653664/177778681-b812497e-6d6e-4378-9bb5-e77dd9840871.png)
+
 
