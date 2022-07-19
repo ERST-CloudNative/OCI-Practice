@@ -4,18 +4,18 @@ VCN10: 10.10.0.0/16
 VCN20: 10.20.0.0/16
 
 
-创建VCN
+### 1. 创建VCN
 
 ![image](https://user-images.githubusercontent.com/4653664/179775047-58553ce0-d098-479b-82db-0fb443bf9ad4.png)
 
 ![image](https://user-images.githubusercontent.com/4653664/179775448-94cd0f54-1a88-4fd4-8947-3d6c3b6184b0.png)
 
-创建DBR
+### 2. 创建DRG
 
 ![image](https://user-images.githubusercontent.com/4653664/179775345-f9df62e4-00ba-4e73-a480-8b1a147a8702.png)
 
 
-在VCN20中完成以下操作
+### 3. 在VCN20中完成以下操作
 
 (1)添加更新路由表
 
@@ -36,7 +36,7 @@ VCN20: 10.20.0.0/16
 
 ![image](https://user-images.githubusercontent.com/4653664/179777554-3e4b2ad6-eecc-495e-914a-54548b928796.png)
 
-验证网络连通性
+### 4.验证网络连通性
 
 ```
 [root@vcn10 ~]# ping -c 3 10.20.0.110
