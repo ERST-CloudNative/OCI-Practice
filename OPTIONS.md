@@ -1000,7 +1000,7 @@ tmpfs                                                                           
 # dd if=/dev/zero of=./testdd1 bs=4k count=1024 oflag=dsync
 1024+0 records in
 1024+0 records out
-4194304 bytes (4.2 MB, 4.0 MiB) copied, 1.43847 s, 2.9 MB/s
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 2.99561 s, 1.4 MB/s
 
 # dd if=/dev/zero of=./testdd1 bs=4k count=10240 oflag=dsync
 10240+0 records in
