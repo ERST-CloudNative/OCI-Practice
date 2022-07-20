@@ -797,5 +797,43 @@ Run status group 0 (all jobs):
 Disk stats (read/write):
   sdb: ios=0/1920, merge=0/18, ticks=0/3951669, in_queue=3950707, util=99.91%
 ```
+##### dd测试
 
+```
+# df -hT
+Filesystem     Type     Size  Used Avail Use% Mounted on
+overlay        overlay   39G  7.2G   32G  19% /
+tmpfs          tmpfs     64M     0   64M   0% /dev
+tmpfs          tmpfs    7.7G     0  7.7G   0% /sys/fs/cgroup
+shm            tmpfs     64M     0   64M   0% /dev/shm
+tmpfs          tmpfs    7.7G   33M  7.7G   1% /etc/hostname
+/dev/sda3      xfs       39G  7.2G   32G  19% /etc/hosts
+/dev/sdc       ext4      50G   53M   47G   1% /usr/share/nginx/html
+tmpfs          tmpfs     16G   12K   16G   1% /run/secrets/kubernetes.io/serviceaccount
+tmpfs          tmpfs    7.7G     0  7.7G   0% /proc/acpi
+tmpfs          tmpfs    7.7G     0  7.7G   0% /proc/scsi
+tmpfs          tmpfs    7.7G     0  7.7G   0% /sys/firmware
+# cd /usr/share/nginx/html
+# pwd
+/usr/share/nginx/html
+# dd if=/dev/zero of=./testdd1 bs=4k count=1024 oflag=dsync
+1024+0 records in
+1024+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 1.34994 s, 3.1 MB/s
 
+# dd if=/dev/zero of=./testdd1 bs=4k count=10240 oflag=dsync
+10240+0 records in
+10240+0 records out
+41943040 bytes (42 MB, 40 MiB) copied, 13.5051 s, 3.1 MB/s
+
+# dd if=/dev/zero of=./testdd1 bs=4M count=10 oflag=dsync
+10+0 records in
+10+0 records out
+41943040 bytes (42 MB, 40 MiB) copied, 0.188951 s, 222 MB/s
+
+# dd if=/dev/zero of=./testdd1 bs=4k count=25600 oflag=dsync
+25600+0 records in
+25600+0 records out
+104857600 bytes (105 MB, 100 MiB) copied, 34.5483 s, 3.0 MB/s
+
+```
