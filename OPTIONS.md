@@ -837,3 +837,183 @@ tmpfs          tmpfs    7.7G     0  7.7G   0% /sys/firmware
 104857600 bytes (105 MB, 100 MiB) copied, 34.5483 s, 3.0 MB/s
 
 ```
+
+
+#### 3.4 OKE + NFS(OCI)
+
+##### 4K-随机读
+
+```
+/ # fio -numjobs=1 -iodepth=128 -direct=1 -ioengine=libaio -sync=1 -rw=randread -bs=4K -size=512M -time_based -runtime=60 -name=Fio -directory=/scratch
+Fio: (g=0): rw=randread, bs=(R) 4096B-4096B, (W) 4096B-4096B, (T) 4096B-4096B, ioengine=libaio, iodepth=128
+fio-3.19
+Starting 1 process
+Fio: Laying out IO file (1 file / 512MiB)
+Jobs: 1 (f=1): [r(1)][100.0%][r=106MiB/s][r=27.1k IOPS][eta 00m:00s]
+Fio: (groupid=0, jobs=1): err= 0: pid=15: Wed Jul 20 10:48:41 2022
+  read: IOPS=24.8k, BW=97.0MiB/s (102MB/s)(5822MiB/60004msec)
+    slat (nsec): min=1332, max=1387.7k, avg=9118.16, stdev=11171.85
+    clat (usec): min=1115, max=17261, avg=5142.30, stdev=825.06
+     lat (usec): min=1124, max=17267, avg=5151.63, stdev=825.22
+    clat percentiles (usec):
+     |  1.00th=[ 3458],  5.00th=[ 3916], 10.00th=[ 4178], 20.00th=[ 4490],
+     | 30.00th=[ 4686], 40.00th=[ 4883], 50.00th=[ 5080], 60.00th=[ 5276],
+     | 70.00th=[ 5473], 80.00th=[ 5735], 90.00th=[ 6194], 95.00th=[ 6587],
+     | 99.00th=[ 7504], 99.50th=[ 7963], 99.90th=[ 9372], 99.95th=[10159],
+     | 99.99th=[11600]
+   bw (  KiB/s): min=84520, max=114496, per=100.00%, avg=99392.23, stdev=7965.69, samples=119
+   iops        : min=21130, max=28624, avg=24848.05, stdev=1991.42, samples=119
+  lat (msec)   : 2=0.01%, 4=6.13%, 10=93.81%, 20=0.06%
+  cpu          : usr=6.45%, sys=23.70%, ctx=287324, majf=0, minf=136
+  IO depths    : 1=0.1%, 2=0.1%, 4=0.1%, 8=0.1%, 16=0.1%, 32=0.1%, >=64=100.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.1%
+     issued rwts: total=1490389,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=128
+
+Run status group 0 (all jobs):
+   READ: bw=97.0MiB/s (102MB/s), 97.0MiB/s-97.0MiB/s (102MB/s-102MB/s), io=5822MiB (6105MB), run=60004-60004msec
+```
+
+##### 4K-随机写
+
+```
+/ # fio -numjobs=1 -iodepth=128 -direct=1 -ioengine=libaio -sync=1 -rw=randwrite -bs=4K -size=512M -time_based -runtime=60 -name=Fio -directory=/scratch
+Fio: (g=0): rw=randwrite, bs=(R) 4096B-4096B, (W) 4096B-4096B, (T) 4096B-4096B, ioengine=libaio, iodepth=128
+fio-3.19
+Starting 1 process
+Jobs: 1 (f=1): [w(1)][100.0%][w=49.0MiB/s][w=12.8k IOPS][eta 00m:00s]
+Fio: (groupid=0, jobs=1): err= 0: pid=18: Wed Jul 20 10:51:14 2022
+  write: IOPS=12.2k, BW=47.6MiB/s (49.9MB/s)(2854MiB/60009msec); 0 zone resets
+    slat (nsec): min=1673, max=586841, avg=11007.84, stdev=9695.25
+    clat (usec): min=4013, max=43918, avg=10500.02, stdev=1300.37
+     lat (usec): min=4033, max=43928, avg=10511.26, stdev=1300.45
+    clat percentiles (usec):
+     |  1.00th=[ 8586],  5.00th=[ 8979], 10.00th=[ 9241], 20.00th=[ 9503],
+     | 30.00th=[ 9765], 40.00th=[10028], 50.00th=[10290], 60.00th=[10552],
+     | 70.00th=[10945], 80.00th=[11469], 90.00th=[11994], 95.00th=[12518],
+     | 99.00th=[14091], 99.50th=[15270], 99.90th=[19792], 99.95th=[26084],
+     | 99.99th=[39584]
+   bw (  KiB/s): min=43512, max=53048, per=100.00%, avg=48731.55, stdev=2813.78, samples=119
+   iops        : min=10878, max=13262, avg=12182.88, stdev=703.44, samples=119
+  lat (msec)   : 10=38.80%, 20=61.11%, 50=0.10%
+  cpu          : usr=4.44%, sys=16.23%, ctx=262304, majf=0, minf=9
+  IO depths    : 1=0.1%, 2=0.1%, 4=0.1%, 8=0.1%, 16=0.1%, 32=0.1%, >=64=100.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.1%
+     issued rwts: total=0,730615,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=128
+
+Run status group 0 (all jobs):
+  WRITE: bw=47.6MiB/s (49.9MB/s), 47.6MiB/s-47.6MiB/s (49.9MB/s-49.9MB/s), io=2854MiB (2993MB), run=60009-60009msec
+```
+
+
+##### 1M-随机读
+
+```
+/ # fio -numjobs=1 -iodepth=128 -direct=1 -ioengine=libaio -sync=1 -rw=randread -bs=1M -size=512M -time_based -runtime=60 -name=Fio -directory=/scratch
+Fio: (g=0): rw=randread, bs=(R) 1024KiB-1024KiB, (W) 1024KiB-1024KiB, (T) 1024KiB-1024KiB, ioengine=libaio, iodepth=128
+fio-3.19
+Starting 1 process
+Jobs: 1 (f=1): [r(1)][100.0%][r=262MiB/s][r=261 IOPS][eta 00m:00s]
+Fio: (groupid=0, jobs=1): err= 0: pid=21: Wed Jul 20 10:54:37 2022
+  read: IOPS=238, BW=238MiB/s (250MB/s)(14.1GiB/60571msec)
+    slat (usec): min=42, max=470, avg=89.27, stdev=30.66
+    clat (msec): min=36, max=1140, avg=537.22, stdev=115.64
+     lat (msec): min=36, max=1140, avg=537.31, stdev=115.64
+    clat percentiles (msec):
+     |  1.00th=[  165],  5.00th=[  363], 10.00th=[  376], 20.00th=[  409],
+     | 30.00th=[  439], 40.00th=[  567], 50.00th=[  575], 60.00th=[  592],
+     | 70.00th=[  609], 80.00th=[  625], 90.00th=[  659], 95.00th=[  676],
+     | 99.00th=[  709], 99.50th=[  802], 99.90th=[  869], 99.95th=[  877],
+     | 99.99th=[ 1133]
+   bw (  KiB/s): min=139264, max=391901, per=99.67%, avg=243069.58, stdev=59465.20, samples=120
+   iops        : min=  136, max=  382, avg=237.37, stdev=58.06, samples=120
+  lat (msec)   : 50=0.02%, 100=0.21%, 250=0.95%, 500=32.59%, 750=65.57%
+  lat (msec)   : 1000=0.64%, 2000=0.01%
+  cpu          : usr=0.18%, sys=2.64%, ctx=14440, majf=0, minf=584
+  IO depths    : 1=0.1%, 2=0.1%, 4=0.1%, 8=0.1%, 16=0.1%, 32=0.2%, >=64=99.6%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.1%
+     issued rwts: total=14426,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=128
+
+Run status group 0 (all jobs):
+   READ: bw=238MiB/s (250MB/s), 238MiB/s-238MiB/s (250MB/s-250MB/s), io=14.1GiB (15.1GB), run=60571-60571msec
+```
+
+
+##### 1M-随机写
+
+```
+/ # fio -numjobs=1 -iodepth=128 -direct=1 -ioengine=libaio -sync=1 -rw=randwrite -bs=1M -size=512M -time_based -runtime=60 -name=Fio -directory=/scratch
+Fio: (g=0): rw=randwrite, bs=(R) 1024KiB-1024KiB, (W) 1024KiB-1024KiB, (T) 1024KiB-1024KiB, ioengine=libaio, iodepth=128
+fio-3.19
+Starting 1 process
+Jobs: 1 (f=1): [w(1)][100.0%][w=237MiB/s][w=236 IOPS][eta 00m:00s]
+Fio: (groupid=0, jobs=1): err= 0: pid=24: Wed Jul 20 10:56:26 2022
+  write: IOPS=238, BW=239MiB/s (250MB/s)(14.1GiB/60540msec); 0 zone resets
+    slat (usec): min=58, max=398, avg=115.66, stdev=25.55
+    clat (msec): min=15, max=1073, avg=536.42, stdev=42.38
+     lat (msec): min=15, max=1073, avg=536.54, stdev=42.38
+    clat percentiles (msec):
+     |  1.00th=[  514],  5.00th=[  514], 10.00th=[  514], 20.00th=[  535],
+     | 30.00th=[  542], 40.00th=[  542], 50.00th=[  542], 60.00th=[  542],
+     | 70.00th=[  542], 80.00th=[  542], 90.00th=[  542], 95.00th=[  542],
+     | 99.00th=[  558], 99.50th=[  768], 99.90th=[ 1011], 99.95th=[ 1045],
+     | 99.99th=[ 1070]
+   bw (  KiB/s): min=153600, max=256000, per=99.82%, avg=243796.50, stdev=9470.18, samples=120
+   iops        : min=  150, max=  250, avg=238.07, stdev= 9.24, samples=120
+  lat (msec)   : 20=0.01%, 50=0.05%, 100=0.10%, 250=0.26%, 500=0.44%
+  lat (msec)   : 750=98.61%, 1000=0.41%, 2000=0.12%
+  cpu          : usr=0.99%, sys=2.45%, ctx=14448, majf=0, minf=10
+  IO depths    : 1=0.1%, 2=0.1%, 4=0.1%, 8=0.1%, 16=0.1%, 32=0.2%, >=64=99.6%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.1%
+     issued rwts: total=0,14440,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=128
+
+Run status group 0 (all jobs):
+  WRITE: bw=239MiB/s (250MB/s), 239MiB/s-239MiB/s (250MB/s-250MB/s), io=14.1GiB (15.1GB), run=60540-60540msec
+```
+
+##### dd测试
+
+```
+# df -hT
+Filesystem                                                                                            Type     Size  Used Avail Use% Mounted on
+overlay                                                                                               overlay   39G  7.1G   32G  19% /
+tmpfs                                                                                                 tmpfs     64M     0   64M   0% /dev
+tmpfs                                                                                                 tmpfs    7.7G     0  7.7G   0% /sys/fs/cgroup
+shm                                                                                                   tmpfs     64M     0   64M   0% /dev/shm
+tmpfs                                                                                                 tmpfs    7.7G   33M  7.7G   1% /etc/hostname
+/dev/sda3                                                                                             xfs       39G  7.1G   32G  19% /etc/hosts
+10.0.20.93:/FileSystem-20220720-0954-37/default-nfs-pv-claim-pvc-34b2774b-82e0-492a-860c-e7337c20cb1a nfs      8.0E     0  8.0E   0% /usr/share/nginx/html
+tmpfs                                                                                                 tmpfs     16G   12K   16G   1% /run/secrets/kubernetes.io/serviceaccount
+tmpfs                                                                                                 tmpfs    7.7G     0  7.7G   0% /proc/acpi
+tmpfs                                                                                                 tmpfs    7.7G     0  7.7G   0% /proc/scsi
+tmpfs                                                                                                 tmpfs    7.7G     0  7.7G   0% /sys/firmware
+# cd /usr/share/nginx/html
+# ls
+
+# dd if=/dev/zero of=./testdd1 bs=4k count=1024 oflag=dsync
+1024+0 records in
+1024+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 1.43847 s, 2.9 MB/s
+
+# dd if=/dev/zero of=./testdd1 bs=4k count=10240 oflag=dsync
+10240+0 records in
+10240+0 records out
+41943040 bytes (42 MB, 40 MiB) copied, 27.8512 s, 1.5 MB/s
+
+# dd if=/dev/zero of=./testdd1 bs=4M count=10 oflag=dsync
+10+0 records in
+10+0 records out
+41943040 bytes (42 MB, 40 MiB) copied, 0.384129 s, 109 MB/s
+
+# dd if=/dev/zero of=./testdd1 bs=4k count=25600 oflag=dsync
+25600+0 records in
+25600+0 records out
+104857600 bytes (105 MB, 100 MiB) copied, 68.2638 s, 1.5 MB/s
+```
