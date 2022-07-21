@@ -1,3 +1,13 @@
+
+随机写：
+
+IOPS: NFS>Block>Local
+
+顺序写：
+
+IOPS: Local>Block>NFS
+
+
 ```
 # df -HT
 Filesystem                                                                                            Type     Size  Used Avail Use% Mounted on
