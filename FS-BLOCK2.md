@@ -7,6 +7,8 @@ IOPS: NFS>Block>Local
 
 IOPS: Local>Block>NFS
 
+> 写日志场景，就属于顺序写操作，优先使用块设备
+
 
 ```
 # df -HT
