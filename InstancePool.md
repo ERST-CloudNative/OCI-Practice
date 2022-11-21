@@ -23,6 +23,8 @@
 
 ![image](https://user-images.githubusercontent.com/4653664/202646400-7813425b-be82-4b19-897f-95a6f1bb681a.png)
 
+![image](https://user-images.githubusercontent.com/4653664/203020811-4cecbb5e-02ec-4cb9-a539-a9f72d74daeb.png)
+
 
 ![image](https://user-images.githubusercontent.com/4653664/202646679-2c5122a2-c769-478d-81e1-6d98617d971f.png)
 
@@ -33,5 +35,16 @@
 4. 对节点池创建弹性伸缩的策略
 
 ![image](https://user-images.githubusercontent.com/4653664/203020096-d7fb0e98-12e6-486f-bb92-3ca3bf68723c.png)
+
+5. 查看效果
+
+因为没有负载，cpu使用量低于50%，实例池目标实例数将为1
+
+![image](https://user-images.githubusercontent.com/4653664/203021299-0e339ccb-839c-4d4e-8d98-7fa296aafd25.png)
+
+![image](https://user-images.githubusercontent.com/4653664/203021692-47e2ed26-77d3-4f51-8e18-1a86cd439fa5.png)
+
+
+
 
 
