@@ -20,7 +20,7 @@
 ```
 [root@nginx0x ~]# oci setup config
 [root@nginx0x ~]# oci compute instance list --compartment-id ocid1.compartment.oc1..xxxxxxx
-``
+```
 
 #### 3. 配置各个NGINX节点
 
