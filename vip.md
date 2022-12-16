@@ -28,9 +28,6 @@ NGINX-01
 
 ```
 [root@nginx01 ~]# cat /etc/nginx/nginx.conf
-# For more information on configuration, see:
-#   * Official English Documentation: http://nginx.org/en/docs/
-#   * Official Russian Documentation: http://nginx.org/ru/docs/
 
 user nginx;
 worker_processes auto;
@@ -160,9 +157,6 @@ NGINX-02
 
 ```
 [root@nginx02 ~]# cat /etc/nginx/nginx.conf
-# For more information on configuration, see:
-#   * Official English Documentation: http://nginx.org/en/docs/
-#   * Official Russian Documentation: http://nginx.org/ru/docs/
 
 user nginx;
 worker_processes auto;
