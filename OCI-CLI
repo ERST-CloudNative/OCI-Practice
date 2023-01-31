@@ -1,0 +1,8 @@
+
+```
+dnf -y install oraclelinux-developer-release-el8
+dnf install python36-oci-cli -y
+oci -v
+oci setup config
+
+```
