@@ -27,6 +27,12 @@ Upload ID: 58dfdd66-9979-3368-0837-d7d9a40e4760
 allow service objectstorage-ap-tokyo-1 to manage object-family in compartment osstest
 ```
 
+```
+allow group storageadmins to manage vaults in compartment osstest
+allow group storageadmins to manage keys in compartment osstest
+allow service objectstorage-ap-tokyo-1 to use keys in compartment osstest
+```
+
 ##### Pre-Authenticated Requests
 
 ```
