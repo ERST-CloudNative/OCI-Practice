@@ -1,0 +1,22 @@
+
+
+##### 创建Bucket
+
+```
+oci os bucket create --name ociaabucket-ocioci  --compartment-id ocid1.compartment.oc1.xxxxx
+```
+
+##### 查看Bucket
+
+```
+oci os bucket list  --compartment-id ocid1.compartment.oc1..aaa.xxx
+```
+
+##### multi-part 上传
+
+```
+dd if=/dev/zero of=./test.bin bs=4M count=128
+
+oci os object put --bucket-name ociaabucket-console --file test.bin --name test.bin --part-size 4 --parallel-upload-count 10
+Upload ID: 58dfdd66-9979-3368-0837-d7d9a40e4760
+```
