@@ -26,3 +26,10 @@ Upload ID: 58dfdd66-9979-3368-0837-d7d9a40e4760
 ```
 allow service objectstorage-ap-tokyo-1 to manage object-family in compartment osstest
 ```
+
+##### Pre-Authenticated Requests
+
+```
+curl https://objectstorage.ap-tokyo-1.oraclecloud.com/p/cddddddddddddddddddd/n/nrtgmiqqwji0/b/s3/o/ --upload-file 1.txt
+
+```
