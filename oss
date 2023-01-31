@@ -20,3 +20,9 @@ dd if=/dev/zero of=./test.bin bs=4M count=128
 oci os object put --bucket-name ociaabucket-console --file test.bin --name test.bin --part-size 4 --parallel-upload-count 10
 Upload ID: 58dfdd66-9979-3368-0837-d7d9a40e4760
 ```
+
+##### 配置policy（lifecycyle）
+
+```
+allow service objectstorage-ap-tokyo-1 to manage object-family in compartment osstest
+```
