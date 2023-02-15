@@ -1,5 +1,3 @@
-```
-
 # This is a sample Python script.
 # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.put_object
 import boto3
@@ -19,21 +17,22 @@ s3.meta.client.create_bucket(Bucket='my-bucket')
 # 上传小文件
 s3.meta.client.upload_file('test.txt', 'my-bucket', 'hello.txt')
 
-# 下载文件
-s3.Bucket('my-bucket').download_file('hello.txt', 'download_file.txt')
+# # 下载文件
+s3.meta.client.download_file('my-bucket', 'hello.txt', 'download_file.txt')
 
 # 删除文件
 s3.meta.client.delete_object(Bucket='my-bucket', Key='hello.txt')
 
 # 删除Bucket
-response = s3.meta.client.delete_bucket(
-    Bucket='my-bucket',
-)
-print(response)
+s3.meta.client.delete_bucket(Bucket='my-bucket')
+
+res = s3.meta.client.list_buckets()
+
+# xx = json.dumps(res, indent=4, default=str)
+# print(xx)
+
+# 查看Bucket列表
+for i in res['Buckets']:
+    print(i['Name'])
 
 
-# Print out the bucket names
-for bucket in s3.buckets.all():
-    print(bucket.name)
-
-```
