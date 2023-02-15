@@ -9,8 +9,8 @@ from boto3.s3.transfer import TransferConfig
 MB = 1024 * 1024
 s3 = boto3.resource(
     's3',
-    aws_access_key_id="4a03fd218136fdead38cfa7222b6f4dd11ebd7b9",
-    aws_secret_access_key="dRdEkuKk5lShQNFtnlIPtidXRQTR5TQKJLY9JWO6/xY=",
+    aws_access_key_id="[Your Key ID]",
+    aws_secret_access_key="[Your SECRET ACCESS KEY]",
     region_name="ap-tokyo-1",  # Region name here that matches the endpoint
     endpoint_url="https://nrtgmiqqwji0.compat.objectstorage.ap-tokyo-1.oraclecloud.com"
     # Include your namespace in the URL
