@@ -63,6 +63,7 @@ ONBOOT=yes
 ```
 
 测试添加的新公网IP是否可以Ping通
+> 注意：需要配置防火墙，放开ICMP协议请求
 
 ```
 [root@test001 ~]# ping -c 3 138.3.221.181
@@ -95,7 +96,43 @@ rtt min/avg/max/mdev = 0.210/0.227/0.253/0.025 ms
 <img width="930" alt="1679303717599" src="https://user-images.githubusercontent.com/4653664/226295787-d99cdd9b-ebe1-4971-8382-16ab8558d728.png">
 
 
+第二张网卡信息如下：
 
+<img width="843" alt="1679306549238" src="https://user-images.githubusercontent.com/4653664/226307464-f80cf63b-255d-4d4f-946b-4ea77ea1ae6e.png">
 
+默认OCI提供了相关的自动配置脚本，为了在每次重启时相应的配置都能生效，这里需要脚本执行配置成`Systend`服务。
 
+```
+[root@test001 ~]# cat /etc/systemd/system/secondary_vnic.service
 
+[Unit]
+Description=Setting the secondary vnic
+After=default.target
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/secondary_vnic_all_configure.sh -c
+[Install]
+WantedBy=multi-user.target
+```
+
+使能`systemd`服务
+
+```
+[root@test001 ~]# systemctl enable secondary_vnic.service --now
+```
+
+验证公网IP可以正常连通
+
+```
+[root@test001 ~]# ping -c 3 168.138.194.178
+PING 168.138.194.178 (168.138.194.178) 56(84) bytes of data.
+64 bytes from 168.138.194.178: icmp_seq=1 ttl=63 time=0.223 ms
+64 bytes from 168.138.194.178: icmp_seq=2 ttl=63 time=0.233 ms
+64 bytes from 168.138.194.178: icmp_seq=3 ttl=63 time=0.239 ms
+
+--- 168.138.194.178 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2041ms
+rtt min/avg/max/mdev = 0.223/0.231/0.239/0.018 ms
+
+```
