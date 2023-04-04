@@ -1,7 +1,7 @@
 
 ## MySQL Enterprise Monitor部署
 
-1. 环境配置
+#### 1. 环境配置
 
 ```
 systemctl stop firewalld;systemctl disable firewalld
@@ -11,13 +11,14 @@ systemctl enable docker --now
 
 ```
 
-2. 部署MEM
+#### 2. 部署MEM
 
 ```
 docker run -d --name mysql8 --net=host -e MYSQL_ROOT_PASSWORD=OCI_test_123 mysql:8.0.32-oracle
 docker run -d --name mme-ui --net=host b43646/mem:v1.0
 ```
-3. 访问MEM
+
+#### 3. 访问MEM
 
 默认地址为https://【Your VM Public IP】:18443/
 
