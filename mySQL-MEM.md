@@ -4,7 +4,10 @@
 #### 1. 环境配置
 
 ```
+# 禁用本地firewalld服务
 systemctl stop firewalld;systemctl disable firewalld
+
+# 安装docker
 dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 dnf install docker-ce -y
 systemctl enable docker --now
