@@ -17,6 +17,7 @@ systemctl enable docker --now
 docker run -d --name mysql8 --net=host -e MYSQL_ROOT_PASSWORD=OCI_test_123 mysql:8.0.32-oracle
 docker run -d --name mme-ui --net=host b43646/mem:v1.0
 ```
+> 注意：这里密码默认，不需要修改
 
 #### 3. 访问MEM
 
