@@ -1,6 +1,8 @@
 
 ## MySQL Enterprise Monitor部署
 
+> Oracle Lunix 8
+
 #### 1. 环境配置
 
 ```
