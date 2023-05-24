@@ -342,8 +342,9 @@ metadata:
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/version: 1.7.1
   annotations:
-    oci.oraclecloud.com/load-balancer-type: "nlb"
-    oci-network-load-balancer.oraclecloud.com/node-label-selector: ingress=nginx
+    oci.oraclecloud.com/load-balancer-type: "lb"
+    service.beta.kubernetes.io/oci-load-balancer-shape: "400Mbps"
+    oci.oraclecloud.com/node-label-selector: ingress=nginx
   name: ingress-nginx-controller
   namespace: ingress-nginx
 spec:
