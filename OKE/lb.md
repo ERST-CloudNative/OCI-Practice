@@ -1,10 +1,10 @@
 ## OKE与LB的集成实践
 
-OKE与LB的集成主要包含两种类型：
+OCI LB分为两种类型：
 - L7 LB
 - L4 NLB
 
-这里仅涉及L7 LB
+这里仅涉及L7 LB。
 
 ### 1. 通过OCI LB访问Nginx
 
@@ -441,5 +441,12 @@ Connection: keep-alive
 ETag: "64230162-267"
 Accept-Ranges: bytes
 
+```
+
+环境清理
+
+```
+[root@loren lb]# kubectl delete -f nginx-demo-svc-ssl.yaml
+[root@loren lb]# kubectl delete secret new-ssl-certificate-secret ssl-certificate-secret
 ```
 
