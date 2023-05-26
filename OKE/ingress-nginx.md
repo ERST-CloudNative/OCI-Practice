@@ -52,6 +52,17 @@ ingress-nginx-controller-admission   ClusterIP      10.96.19.40     <none>      
 
 ## Prometheus监控
 
+部署`Prometheus`
+
+```
+$ git clone https://github.com/prometheus-operator/kube-prometheus.git
+$ cd kube-prometheus/
+$ kubectl create -f manifests/setup
+$ until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
+$ kubectl create -f manifests/
+$ kubectl -n monitoring get pods
+```
+
 创建`ingress`
 
 ```
