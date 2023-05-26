@@ -67,4 +67,43 @@ ingress-nginx-controller-admission   ClusterIP      10.96.19.40     <none>      
 
 ![image](https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/56a0aa58-043a-4219-bd44-6b2cb79daba3)
 
+## 日志(Fluentd-OpenSearch)
+
+`OpenSearch`集群的创建参考上一级目录下的`opensearch.md`
+
+部署`fluentd`,其中`fluentd-daemonset-opensearch.yaml`中的需要填写`opensearch`的用户名、密码、`API endpoint`等信息
+
+```
+[root@loren ~]# kubectl apply -f fluentd.configmap
+[root@loren ~]# kubectl apply -f fluentd-daemonset-opensearch.yaml
+```
+
+访问`Opensearch Dashboard`，参考上一级目录下的`bastion.md`
+
+<img width="960" alt="1685108229782" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/8a984c63-24f2-40c6-b5d2-c172040b2d4f">
+
+<img width="956" alt="1685108136257" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/0894633c-b39b-4fa0-987b-a06f6f4853e7">
+
+回到`Discover`页面
+
+<img width="960" alt="1685108291876" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/1522fdde-3b7d-4235-8f23-bdf300c5c138">
+
+
+创建过滤条件，这里我们查看指定pod的日志信息。
+
+<img width="948" alt="1685107654678" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/a019e2ec-df01-443a-b886-a1fba0c13ffb">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
