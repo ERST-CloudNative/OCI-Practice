@@ -1,4 +1,4 @@
-## Nginx Ingress方案
+## Nginx Ingress方案-L7
 
 给部分计算节点打标签，以部署`Nginx ingress controller` `pod`。
 
@@ -121,9 +121,86 @@ $ kubectl -n monitoring get pods
 
 <img width="948" alt="1685107654678" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/a019e2ec-df01-443a-b886-a1fba0c13ffb">
 
+## Nginx Ingress方案-L4
+
+删除L7 LB
+```
+[root@loren lb]# kubectl -n ingress-nginx delete svc ingress-nginx-controller
+```
+
+创建L4 LB(Network LoadBalancer)
+
+```
+[root@loren lb]# cat ingress-nlb.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.7.1
+  annotations:
+    oci.oraclecloud.com/load-balancer-type: "nlb"
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+spec:
+  externalTrafficPolicy: Local
+  loadBalancerIP: 155.248.184.230
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - appProtocol: http
+    name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - appProtocol: https
+    name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
+  type: LoadBalancer
+
+[root@loren lb]# kubectl apply -f ingress-nlb.yaml
+```
+
+因为LB转发监听节点端口，所以这里需要开通子网的防火墙
+
+<img width="927" alt="1685361196092" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/14e218c1-0dc8-442b-8495-570f4782454e">
+
+<img width="879" alt="1685361224136" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/d56d45ac-fe72-47d4-8465-0688e8a94d01">
 
 
+这里需要明确添加哪些端口，这里主要有三个端口：
+80映射端口
+443映射端口
+健康检查端口
 
+<img width="940" alt="b734383eab9d7b9501d475b5f01a1c7" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/65aa6812-9d02-401c-903b-e3f6d308e335">
+<img width="937" alt="a21ec4a9d241aac867828f790a971a3" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/f0e3d054-c6be-4d65-901f-cff3837c9e3c">
+<img width="951" alt="c1b4cbdbab252069196ad4b39dc148b" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/f3e1b585-5a31-4d05-b632-1901fa910e6c">
+
+添加出站规则
+
+<img width="950" alt="1685361887380" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/f1e2f079-74f2-4b69-87fc-76bc64bf00c3">
+
+<img width="946" alt="1685361936758" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/1d00b6c7-4dfe-4587-87de-8caed59999ff">
+
+验证
+
+```
+[root@loren lb]# curl www.demo.io
+<html><body><h1>It works!</h1></body></html>
+
+```
 
 
 
