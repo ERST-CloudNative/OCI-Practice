@@ -15,10 +15,27 @@ NAME          STATUS   ROLES   AGE     VERSION
 > ingress-nginx是经过编辑的，所以需要做以上配置
 > 未经过修改的配置文件地址：https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.1/deploy/static/provider/cloud/deploy.yaml
 
-可以通过修改`ingress-nginx.yaml`中的参数来调整LB带宽
+可以通过修改`ingress-nginx.yaml`中的参数来调整LB带宽、指定预留IP等
 
 ```
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.7.1
+  annotations:
+    oci.oraclecloud.com/load-balancer-type: "lb"
     service.beta.kubernetes.io/oci-load-balancer-shape: "400Mbps"
+    oci.oraclecloud.com/node-label-selector: ingress=nginx
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+spec:
+  externalTrafficPolicy: Local
+  loadBalancerIP: 158.101.71.121
 ```
 
 部署 `Nginx Ingress`，并扩容`ingress-nginx-controller`个数
