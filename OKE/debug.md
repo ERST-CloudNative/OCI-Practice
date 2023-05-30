@@ -12,6 +12,25 @@
 $ openssl s_client -showcerts -host 127.0.0.1 -port 9200
 ```
 
+证书有效期查验
+
+```
+[root@loren ~]# openssl s_client -showcerts -connect 132.226.15.10:6443 | openssl x509 -text
+...
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            55:84:8c:77:e3:82:fe:b6:a6:4d:df:79:3c:f8:e5:40
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN = K8s CA, C = US, L = Austin, O = Oracle, OU = Oci, ST = Texas
+        Validity
+            Not Before: May 29 08:30:09 2023 GMT
+            Not After : May 29 08:30:09 2028 GMT
+        Subject: CN = kubernetes.default, C = US, L = Austin, O = Oracle, OU = Oci, ST = Texas
+...
+```
+
 节点网络调试
 
 ```
