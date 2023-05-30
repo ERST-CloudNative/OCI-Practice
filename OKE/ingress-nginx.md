@@ -1,5 +1,7 @@
 ## Nginx Ingress方案-L7
 
+### 部署Nginx Ingress
+
 给部分计算节点打标签，以部署`Nginx ingress controller` `pod`。
 
 ```
@@ -56,7 +58,34 @@ ingress-nginx-controller-admission   ClusterIP      10.96.19.40     <none>      
 
 ![image](https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/d5476df9-275c-4dca-bd0b-5540d17a9aeb)
 
-测试验证
+### 配置防火墙
+
+这里需要开放的端口有：
+
+转发端口：30779，31410
+健康检查端口：30799
+
+
+<img width="942" alt="1af846f4c008605aad301d96e0eed65" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/38c0919a-e73a-4c16-afcc-4a23f41d37b4">
+
+<img width="893" alt="eaff1eaab85c46cff0c6d188c2b1065" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/80c042e6-ce14-4d55-bbe2-2763c9be106c">
+
+<img width="901" alt="333b4efd7bd90b6cda89cf660c9792b" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/bad59114-a6cd-462e-bdab-a047aeae0b55">
+
+<img width="945" alt="1685431322329" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/6e0750fc-3669-4bb6-b6ba-c22803934077">
+
+
+检查相关端口是否开通，如果没有，可以通过以下方式手动开通相关端口。
+
+
+<img width="713" alt="83c145d55d5f077fd78dfad07708822" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/8476c22d-3a61-4dae-9372-8d8080067376">
+
+<img width="733" alt="968686628403d877522528a4a5856eb" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/48fcb8a4-acdb-4880-b634-f6fc8ee14b91">
+
+<img width="956" alt="f0a8fa1fb6acc6717bbadec42c0a990" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/8c0677e9-88c5-4be4-8a77-2fccb75c99b2">
+
+
+### 测试验证
 
 ```
 [root@loren lb]# kubectl create deployment demo --image=httpd --port=80
