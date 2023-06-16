@@ -107,6 +107,12 @@ Accept-Ranges: bytes
 [root@test-0x ~]# fortio server
 ```
 
+访问fortio UI界面
+
+```
+http://YOUR_NLB_PUBLIC_IP:8080/fortio/
+```
+
 test-01压测配置与结果
 
 <img width="587" alt="1686909670448" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/f5844f59-5ec4-4fc6-8f69-180d727fc221">
