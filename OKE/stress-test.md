@@ -1,5 +1,6 @@
 ## 压测
 
+
 ### 1. 压测环境与架构
 
 工具
@@ -25,7 +26,8 @@ Compuye Node Resources: 8 OCPU/32GB/50GB
 
 整体架构
 
-![image](https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/298740e5-55f9-4215-b5c3-c7357d6e7a5c)
+![image](https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/dad387e9-e60e-4c7b-b7d1-dab3f18435e5)
+
 
 ### 2. 压测服务准备
 
