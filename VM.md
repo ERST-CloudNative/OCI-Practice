@@ -276,9 +276,9 @@ ANY {instance.compartment.id = 'ocid1.tenancy.oc1..aaaaaaaaiiberatsexxxw3qkqtkf3
 
 <img width="868" alt="1688121383570" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/9230444f-542c-4a78-9f44-d3b0459b395f">
 
-<img width="877" alt="1688121446310" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/0511b90b-1c08-4b76-988e-74c70f6c1563">
-
 <img width="754" alt="1688122028300" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/d8f7e0d7-03b6-458e-ba66-67adef75354d">
+
+策略内容如下，请替换为你的compartment区间名称
 
 ```
 Allow dynamic-group InstantAgent to use instances in compartment k8s
