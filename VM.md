@@ -295,4 +295,4 @@ Allow dynamic-group InstantAgent to use volume-attachments in compartment k8s
 
 <img width="951" alt="1688123926124" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/5be4dde7-a735-471a-929d-f3b93ff5446f">
 
-
+> 官方文档： https://docs.oracle.com/en-us/iaas/Content/Block/Tasks/enablingblockvolumemanagementplugin.htm#blockplugin-prereq__perms
