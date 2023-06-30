@@ -106,10 +106,18 @@ tmpfs                      tmpfs     362M     0  362M   0% /run/user/1000
 
 9. 访问虚拟机test-002-image-vm
 
-验证克隆的数据盘是否可以正常挂载，并验证数据的完整性
+验证克隆的数据盘是否可以自动挂载，并验证数据的完整性
 
 ```
-# 默认制作的
+[root@test-002-image-vm ~]# lsblk
+NAME               MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda                  8:0    0 46.6G  0 disk
+├─sda1               8:1    0  100M  0 part /boot/efi
+├─sda2               8:2    0    1G  0 part /boot
+└─sda3               8:3    0 45.5G  0 part
+  ├─ocivolume-root 252:0    0 35.5G  0 lvm  /
+  └─ocivolume-oled 252:1    0   10G  0 lvm  /var/oled
+sdb                  8:16   0   50G  0 disk /opt/test
 [root@test-002-image-vm ~]# df -hT
 Filesystem                 Type      Size  Used Avail Use% Mounted on
 devtmpfs                   devtmpfs  1.8G     0  1.8G   0% /dev
@@ -120,63 +128,34 @@ tmpfs                      tmpfs     1.8G     0  1.8G   0% /sys/fs/cgroup
 /dev/sda2                  xfs      1014M  334M  681M  33% /boot
 /dev/sda1                  vfat      100M  5.1M   95M   6% /boot/efi
 /dev/mapper/ocivolume-oled xfs        10G  107M  9.9G   2% /var/oled
-tmpfs                      tmpfs     362M     0  362M   0% /run/user/988
+/dev/sdb                   xfs        50G  389M   50G   1% /opt/test
 tmpfs                      tmpfs     362M     0  362M   0% /run/user/0
+tmpfs                      tmpfs     362M     0  362M   0% /run/user/988
 tmpfs                      tmpfs     362M     0  362M   0% /run/user/1000
-
-[root@test-002-image-vm ~]# lsblk
-NAME               MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-sda                  8:0    0 46.6G  0 disk
-├─sda1               8:1    0  100M  0 part /boot/efi
-├─sda2               8:2    0    1G  0 part /boot
-└─sda3               8:3    0 45.5G  0 part
-  ├─ocivolume-root 252:0    0 35.5G  0 lvm  /
-  └─ocivolume-oled 252:1    0   10G  0 lvm  /var/oled
-[root@test-002-image-vm ~]# lsblk
-NAME               MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-sda                  8:0    0 46.6G  0 disk
-├─sda1               8:1    0  100M  0 part /boot/efi
-├─sda2               8:2    0    1G  0 part /boot
-└─sda3               8:3    0 45.5G  0 part
-  ├─ocivolume-root 252:0    0 35.5G  0 lvm  /
-  └─ocivolume-oled 252:1    0   10G  0 lvm  /var/oled
-sdb                  8:16   0   50G  0 disk /opt/test
-
-[root@test-002-image-vm ~]# blkid /dev/sdb
-/dev/sdb: UUID="611cdb33-a922-4b6e-98de-288ba9d84b83" BLOCK_SIZE="4096" TYPE="xfs"
-
-
-[root@test-002-image-vm ~]# echo "UUID=611cdb33-a922-4b6e-98de-288ba9d84b83 /opt/test            xfs     defaults        0 0" >> /etc/fstab
-
-[root@test-002-image-vm ~]# mount -a
-
-[root@test-002-image-vm ~]# ls /opt/test/
-test.txt
 [root@test-002-image-vm ~]# cat /opt/test/test.txt
 123
+
 ```
 
 ### 场景-02：VM+数据盘(iSCSI)，制作镜像，然后基于镜像创建新的VM
 
-相关步骤与场景-01类似，这里部分内容简述
+相关步骤与场景-01类似，这里部分内容简述,为了便于实现iSCSI块设备挂载，减少手动命令行操作，这里需要启用Oracle Cloud Agent插件
 
-1. 创建虚拟机test-003
-2. 创建块存储卷test-003
-3. 将块存储卷test-003以iSCSI方式挂载虚拟机test-003
+1. Oracle Cloud Agent插件使用权限配置，参考附录一
 
-<img width="960" alt="1688122774765" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/1c7ca7ae-ba2e-46a0-84f7-4df6f5d4c77b">
+2. 创建虚拟机demo-02
 
-获取挂载命令行信息
+<img width="725" alt="1688125657065" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/3a9b2766-738c-4754-a1a9-7079cc45ddd1">
 
-<img width="947" alt="1688122839191" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/3d5c6176-ed7f-49a0-b244-8a395a8b8f68">
-<img width="486" alt="1688122888963" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/f85c9082-56bf-4b80-95b6-6aa3b111e93d">
+3. 创建块存储卷demo-02
+4. 将块存储卷demo-02以iSCSI方式挂载虚拟机demo-02
+<img width="951" alt="1688126149276" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/e917e741-7aec-4265-b843-814f4ce51637">
 
-
-4. 访问虚拟机
+6. 访问虚拟机
 
 ```
-[root@test-003 ~]# # 执行上一步获取的挂载命令
-[root@test-003 ~]# lsblk
+# 等待插件自动挂载iSCSI块设备
+[root@demo-02 ~]# lsblk
 NAME               MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 sda                  8:0    0 46.6G  0 disk
 ├─sda1               8:1    0  100M  0 part /boot/efi
@@ -185,10 +164,8 @@ sda                  8:0    0 46.6G  0 disk
   ├─ocivolume-root 252:0    0 35.5G  0 lvm  /
   └─ocivolume-oled 252:1    0   10G  0 lvm  /var/oled
 sdb                  8:16   0   50G  0 disk
-[root@test-003 ~]# mkmkdir -p /opt/test
--bash: mkmkdir: command not found
-[root@test-003 ~]# mkdir -p /opt/test
-[root@test-003 ~]# mkfs.xfs /dev/sdb
+[root@demo-02 ~]# mkdir -p /opt/test
+[root@demo-02 ~]# mkfs.xfs /dev/sdb
 meta-data=/dev/sdb               isize=512    agcount=4, agsize=3276800 blks
          =                       sectsz=4096  attr=2, projid32bit=1
          =                       crc=1        finobt=1, sparse=1, rmapbt=0
@@ -200,39 +177,44 @@ log      =internal log           bsize=4096   blocks=25600, version=2
          =                       sectsz=4096  sunit=1 blks, lazy-count=1
 realtime =none                   extsz=4096   blocks=0, rtextents=0
 Discarding blocks...Done.
-[root@test-003 ~]# blkid /dev/sdb
-/dev/sdb: UUID="8c70f6b4-1f2a-463b-a4b8-a52ddafead8a" BLOCK_SIZE="4096" TYPE="xfs"
-[root@test-003 ~]# vi /etc/fstab
-[root@test-003 ~]# echo "UUID=8c70f6b4-1f2a-463b-a4b8-a52ddafead8a  /opt/test            xfs    defaults,noatime,_netdev        0 0" >> /etc/fstab
-[root@test-003 ~]# mount -a
-[root@test-003 ~]# df -hT
+[root@demo-02 ~]# blkid /dev/sdb
+/dev/sdb: UUID="d070340f-724e-483f-a1f3-46434f6e8372" BLOCK_SIZE="4096" TYPE="xfs"
+[root@demo-02 ~]# vi /etc/fstab
+[root@demo-02 ~]# echo "UUID=d070340f-724e-483f-a1f3-46434f6e8372 /opt/test            xfs     defaults,noatime,_netdev        0 2" >> /etc/fstab
+[root@demo-02 ~]# mount -a
+[root@demo-02 ~]# df -hT
 Filesystem                 Type      Size  Used Avail Use% Mounted on
 devtmpfs                   devtmpfs  1.8G     0  1.8G   0% /dev
 tmpfs                      tmpfs     1.8G     0  1.8G   0% /dev/shm
 tmpfs                      tmpfs     1.8G  8.7M  1.8G   1% /run
 tmpfs                      tmpfs     1.8G     0  1.8G   0% /sys/fs/cgroup
-/dev/mapper/ocivolume-root xfs        36G  8.7G   27G  25% /
-/dev/mapper/ocivolume-oled xfs        10G  105M  9.9G   2% /var/oled
+/dev/mapper/ocivolume-root xfs        36G  8.3G   28G  24% /
+/dev/mapper/ocivolume-oled xfs        10G  106M  9.9G   2% /var/oled
 /dev/sda2                  xfs      1014M  334M  681M  33% /boot
 /dev/sda1                  vfat      100M  5.1M   95M   6% /boot/efi
 tmpfs                      tmpfs     362M     0  362M   0% /run/user/0
 tmpfs                      tmpfs     362M     0  362M   0% /run/user/988
 tmpfs                      tmpfs     362M     0  362M   0% /run/user/1000
 /dev/sdb                   xfs        50G  389M   50G   1% /opt/test
-[root@test-003 ~]# echo 1234 >> /opt/test/test.txt
-[root@test-003 ~]# cat /opt/test/test.txt
-1234
-```
-
-6. 制作镜像test-003
-7. 使用镜像test-003创建虚拟机test-003-image-vm
-8. 克隆test-003块存储
-9. 挂载test-003-clone块存储
-10. 访问虚拟机test-003-image-vm
-<img width="878" alt="1688124085734" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/5c394593-18ac-474a-9e71-a6c2e14507d6">
+[root@demo-02 ~]# echo 123 > /opt/test/test.txt
+[root@demo-02 ~]# cat /opt/test/test.txt
+123
 
 ```
-[root@test-003-image-vm ~]# lsblk
+7. 制作镜像demo-02
+8. 基于镜像demo-02，创建虚拟机demo-02-image-vm
+
+<img width="662" alt="1688126927719" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/ee0b6844-a716-49a8-bbb0-2b06bfdb99ab">
+
+9. 克隆demo-02块存储
+10. 挂载demo-01-clone块存储卷
+
+<img width="960" alt="1688127074295" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/967e27cc-9c49-48bc-aa18-bf9395b2b201">
+
+11. 访问虚拟机demo-02-image-vm
+
+```
+[root@demo-02-image-vm ~]# lsblk
 NAME               MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 sda                  8:0    0 46.6G  0 disk
 ├─sda1               8:1    0  100M  0 part /boot/efi
@@ -241,28 +223,27 @@ sda                  8:0    0 46.6G  0 disk
   ├─ocivolume-root 252:0    0 35.5G  0 lvm  /
   └─ocivolume-oled 252:1    0   10G  0 lvm  /var/oled
 sdb                  8:16   0   50G  0 disk /opt/test
-
-[root@test-003-image-vm ~]# df -hT
+[root@demo-02-image-vm ~]# df -hT
 Filesystem                 Type      Size  Used Avail Use% Mounted on
 devtmpfs                   devtmpfs  1.8G     0  1.8G   0% /dev
 tmpfs                      tmpfs     1.8G     0  1.8G   0% /dev/shm
 tmpfs                      tmpfs     1.8G   17M  1.8G   1% /run
 tmpfs                      tmpfs     1.8G     0  1.8G   0% /sys/fs/cgroup
 /dev/mapper/ocivolume-root xfs        36G  8.7G   27G  25% /
-/dev/mapper/ocivolume-oled xfs        10G  108M  9.9G   2% /var/oled
 /dev/sda2                  xfs      1014M  334M  681M  33% /boot
+/dev/mapper/ocivolume-oled xfs        10G  106M  9.9G   2% /var/oled
 /dev/sda1                  vfat      100M  5.1M   95M   6% /boot/efi
-tmpfs                      tmpfs     362M     0  362M   0% /run/user/0
 tmpfs                      tmpfs     362M     0  362M   0% /run/user/988
+tmpfs                      tmpfs     362M     0  362M   0% /run/user/0
 tmpfs                      tmpfs     362M     0  362M   0% /run/user/1000
 /dev/sdb                   xfs        50G  389M   50G   1% /opt/test
 
-
-[root@test-003-image-vm ~]# cat /opt/test/test.txt
-1234
-
+[root@demo-02-image-vm ~]# cat /opt/test/test.txt
+123
 ```
 
+
+### 附录一、Oracle Cloud Agent的权限配置
 
 为了能够让虚拟机自动挂载iSCSI卷，需要配置Oracle Cloud Agent的权限
 
@@ -283,9 +264,9 @@ tmpfs                      tmpfs     362M     0  362M   0% /run/user/1000
 ![Uploading 1688121779256.png…]()
 
 ```
-ANY {instance.compartment.id = 'ocid1.compartment.oc1..aaaaaaaazclvs3334e3g2fkfcrqiih7l7nrzoii7tl62hquoy5t4dp25j5ba'}
+ANY {instance.compartment.id = 'ocid1.tenancy.oc1..aaaaaaaaiiberatse5f3hecnzcpw3qkqtkf3a7c3x7jvcvj4dm5xactoyaja', instance.compartment.id = 'ocid1.compartment.oc1..aaaaaaaazclvs3334e3g2fkfcrqiih7l7nrzoii7tl62hquoy5t4dp25j5ba'}
 ```
-> 需要将instance.compartment.id的值修改为上一步获取的区间ID
+> 第一个值为租户OCID，第二个值为区间OCID
 
 <img width="957" alt="1688120842869" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/ac14f4d6-3d84-419c-84b6-4667df4920e9">
 <img width="953" alt="1688121318184" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/cd14480f-0c08-4ce3-9040-58f38d1b5de7">
@@ -298,6 +279,11 @@ ANY {instance.compartment.id = 'ocid1.compartment.oc1..aaaaaaaazclvs3334e3g2fkfc
 <img width="877" alt="1688121446310" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/0511b90b-1c08-4b76-988e-74c70f6c1563">
 
 <img width="754" alt="1688122028300" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/d8f7e0d7-03b6-458e-ba66-67adef75354d">
+
+```
+Allow dynamic-group InstantAgent to use instances in compartment k8s
+Allow dynamic-group InstantAgent to use volume-attachments in compartment k8s
+```
 
 创建虚拟机时主要勾选
 
