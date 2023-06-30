@@ -258,16 +258,16 @@ tmpfs                      tmpfs     362M     0  362M   0% /run/user/1000
 
 
 创建动态组
- 
-![Uploading 1688121779256.png…]()
+
+<img width="795" alt="1688127525427" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/6e399629-1f75-4844-b08d-d0819452c1be">
+
+<img width="932" alt="1688127459648" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/71b2ac16-3647-4e91-977e-1665010b3f77">
+
 
 ```
-ANY {instance.compartment.id = 'ocid1.tenancy.oc1..aaaaaaaaiiberatse5f3hecnzcpw3qkqtkf3a7c3x7jvcvj4dm5xactoyaja', instance.compartment.id = 'ocid1.compartment.oc1..aaaaaaaazclvs3334e3g2fkfcrqiih7l7nrzoii7tl62hquoy5t4dp25j5ba'}
+ANY {instance.compartment.id = 'ocid1.tenancy.oc1..aaaaaaaaiiberatsexxxw3qkqtkf3a7c3x7jvcvj4dm5xactoyaja', instance.compartment.id = 'ocid1.compartment.oc1..aaaaaaaazclvs3334e3g2fkfcrqxxxxnrzoii7tl62hquoy5t4dp25j5ba'}
 ```
 > 第一个值为租户OCID，第二个值为区间OCID
-
-<img width="957" alt="1688120842869" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/ac14f4d6-3d84-419c-84b6-4667df4920e9">
-<img width="953" alt="1688121318184" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/cd14480f-0c08-4ce3-9040-58f38d1b5de7">
 
 
 创建权限策略
@@ -283,7 +283,7 @@ Allow dynamic-group InstantAgent to use instances in compartment k8s
 Allow dynamic-group InstantAgent to use volume-attachments in compartment k8s
 ```
 
-创建虚拟机时主要勾选
+创建虚拟机时要勾选"Block Volume Management"
 
 <img width="681" alt="1688123608982" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/517b30f2-f085-4cc1-a7c4-30c200e330b0">
 
