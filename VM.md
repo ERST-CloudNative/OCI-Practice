@@ -207,7 +207,7 @@ tmpfs                      tmpfs     362M     0  362M   0% /run/user/1000
 <img width="662" alt="1688126927719" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/ee0b6844-a716-49a8-bbb0-2b06bfdb99ab">
 
 9. 克隆demo-02块存储
-10. 挂载demo-01-clone块存储卷
+10. 挂载demo-02-clone块存储卷
 
 <img width="960" alt="1688127074295" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/967e27cc-9c49-48bc-aa18-bf9395b2b201">
 
