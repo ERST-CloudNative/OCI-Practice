@@ -1,4 +1,6 @@
-虚拟机使用场景
+## 虚拟机使用场景
+
+文中主要阐述以下两类场景的实操：
 
 场景-1： VM+数据盘(半虚拟化)，制作镜像，然后基于镜像创建新的VM
 
@@ -283,7 +285,9 @@ Allow dynamic-group InstantAgent to use instances in compartment k8s
 Allow dynamic-group InstantAgent to use volume-attachments in compartment k8s
 ```
 
-创建虚拟机时要勾选"Block Volume Management"
+至此，权限配置完成。
+
+另外，需要注意的是，创建虚拟机时要勾选"Block Volume Management"
 
 <img width="681" alt="1688123608982" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/517b30f2-f085-4cc1-a7c4-30c200e330b0">
 
