@@ -67,7 +67,7 @@ for i in range(1, 2):
     # Get the data from response
     print(analyze_image_response.data)
 
-# 示例：
+# 返回结果示例：
 # {
 #   "errors": [],
 #   "image_classification_model_version": null,
