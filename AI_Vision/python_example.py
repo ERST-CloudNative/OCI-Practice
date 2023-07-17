@@ -61,7 +61,7 @@ for i in range(1, 2):
             image=oci.ai_vision.models.InlineImageDetails(
                 source="INLINE",
                 data=encoded_string.decode('utf-8')),
-            compartment_id="ocid1.compartment.oc1..aaaaaaaaio757zvh35zqqg7xfh6yusmwylr3qdm2lpth3e2vyfsg47f3mv7q"),
+            compartment_id="ocid1.compartment.oc1..aaaaaaaaio757zvsdsdhsdsdshd6yaadr3dsdlpdsdssg4sdsdsq"),
         opc_request_id=uuid.uuid4().__str__())
 
     # Get the data from response
