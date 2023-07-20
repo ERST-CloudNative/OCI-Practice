@@ -22,6 +22,20 @@ Allow group vm-console-group to read instance in tenancy
 
 2. 实践案例-密码遗忘
 
+
+默认情况,Oralce Linux8 禁用了密码登录认证方式，这里为了实验效果，需要开启sshd的密码认证配置
+
+```
+[root@demo ~]# vi /etc/ssh/sshd_config
+
+# To disable tunneled clear text passwords, change to no here!
+PasswordAuthentication yes
+#PermitEmptyPasswords no
+#PasswordAuthentication no
+
+[root@demo ~]# systemctl restart sshd
+```
+
 启动Cloud Shell连接
 
 <img width="838" alt="1689841565180" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/3d70b62d-248e-4d78-8793-2ec800e140ce">
@@ -50,7 +64,7 @@ rd.break enforcing=0
 
 <img width="583" alt="1689844479616" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/e2532414-c35a-4de3-88a4-66024e32e754">
 
-默认`/sysroot/`下的挂载的文件系统是只读的，这里重新挂载文件系统，并配置读写权限,然后切换到`/sysroot`下，修改密码
+默认`/sysroot/`下的挂载的文件系统是只读的，这里重新挂载文件系统，并配置读写权限,然后切换到`/sysroot`下，修改密码,SELinux重新打标签
 
 <img width="435" alt="1689844713151" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/274c8d03-f705-4012-8af1-e4ae577d7b6f">
 
@@ -58,14 +72,25 @@ rd.break enforcing=0
 sh-4.4# mount -o remount,rw /sysroot
 sh-4.4# chroot /sysroot
 sh-4.4# passwd YOUR_USERS_XXXX
-
+sh-4.4# touch /.autorelabel
 # 退出并重启
 sh-4.4# exit
 switch_root:/# reboot -f
 ```
 
+验证使用可以通过新的密码进行登录
 
+```
+[root@linuxvm ~]# ssh opc@150.xxx.xxx.141
+opc@150.xxx.xxx.141's password:
+Activate the web console with: systemctl enable --now cockpit.socket
 
+Last failed login: Thu Jul 20 10:31:18 GMT 2023 from 158.xxx.xxx.198 on ssh:notty
+There were 4 failed login attempts since the last successful login.
+Last login: Thu Jul 20 10:21:59 2023 from 158.xxx.xxx.198
+[opc@demo ~]$
+
+```
 
 
 
