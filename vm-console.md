@@ -81,17 +81,8 @@ switch_root:/# reboot -f
 
 验证使用可以通过新的密码进行登录
 
-```
-[root@linuxvm ~]# ssh opc@xxx.xxx.xxx.xxx
-opc@xxxx.xxx.xxx.xxx's password:
-Activate the web console with: systemctl enable --now cockpit.socket
+<img width="652" alt="1689850368968" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/31119f70-0faf-40b9-a2c2-e50a83520388">
 
-Last failed login: Thu Jul 20 10:31:18 GMT 2023 from xxx.xxx.xxx.xxx on ssh:notty
-There were 4 failed login attempts since the last successful login.
-Last login: Thu Jul 20 10:21:59 2023 from xxx.xxx.xxx.xxx
-[opc@demo ~]$
-
-```
 
 
 
