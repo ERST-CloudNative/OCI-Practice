@@ -81,13 +81,13 @@ switch_root:/# reboot -f
 验证使用可以通过新的密码进行登录
 
 ```
-[root@linuxvm ~]# ssh opc@150.xxx.xxx.141
-opc@150.xxx.xxx.141's password:
+[root@linuxvm ~]# ssh opc@xxx.xxx.xxx.xxx
+opc@xxxx.xxx.xxx.xxx's password:
 Activate the web console with: systemctl enable --now cockpit.socket
 
-Last failed login: Thu Jul 20 10:31:18 GMT 2023 from 158.xxx.xxx.198 on ssh:notty
+Last failed login: Thu Jul 20 10:31:18 GMT 2023 from xxx.xxx.xxx.xxx on ssh:notty
 There were 4 failed login attempts since the last successful login.
-Last login: Thu Jul 20 10:21:59 2023 from 158.xxx.xxx.198
+Last login: Thu Jul 20 10:21:59 2023 from xxx.xxx.xxx.xxx
 [opc@demo ~]$
 
 ```
