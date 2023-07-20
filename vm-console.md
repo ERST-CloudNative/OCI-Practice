@@ -1,7 +1,7 @@
 ## VM串口使用示例
 
 
-1. 权限配置
+### 1. 权限配置
 
 
 创建用户组，并将相关用户添加到用户组
@@ -20,7 +20,7 @@ Allow group vm-console-group to read instance in tenancy
 ```
 
 
-2. 实践案例-密码遗忘
+### 2. 实践案例-忘记密码
 
 
 默认情况,Oralce Linux8 禁用了密码登录认证方式，这里为了实验效果，需要开启sshd的密码认证配置
