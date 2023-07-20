@@ -22,6 +22,7 @@ Allow group vm-console-group to read instance in tenancy
 
 ### 2. 实践案例-忘记密码
 
+> 注意，这个场景仅适用于忘记root用户密码，如果是普通用户密码，请联系Linux管理员进行重置密码。
 
 默认情况,Oralce Linux8 禁用了密码登录认证方式，这里为了实验效果，需要开启sshd的密码认证配置
 
