@@ -1,4 +1,4 @@
-## Console connection使用示例
+## VM串口使用示例
 
 
 1. 权限配置
