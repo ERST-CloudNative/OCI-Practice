@@ -1,51 +1,76 @@
 
 
 
-```
-    1  systemctl disable firewalld
-    2  systemctl stop firewalld
-    3  wget https://github.com/prometheus/pushgateway/releases/download/v0.8.0/pushgateway-0.8.0.linux-amd64.tar.gz
-    4  ls
-    5  tar xvzf pushgateway-0.8.0.linux-amd64.tar.gz
-    6  cd pushgateway-0.8.0.linux-amd64/
-    7  ls
-    8  ./pushgateway &
-    9  cd
-   10  wget https://github.com/prometheus/prometheus/releases/download/v2.9.2/prometheus-2.9.2.linux -amd64.tar.gz
-   11  tar xvzf prometheus-2.9.2.linux-amd64.tar.gz
-   12  ls
-   13  rm -f md64.tar.gz
-   14  rm -f pushgateway-0.8.0.linux-amd64
-   15  ls
-   16  ps
-   17  wget https://github.com/prometheus/prometheus/releases/download/v2.9.2/prometheus-2.9.2.linux-amd64.tar.gz
-   18  tar xvzf prometheus-2.9.2.linux-amd64.tar.gz
-   19  cd prometheus-2.9.2.linux-amd64/
-   20  vi prometheus.yml
-   21  ls
-   22  ./prometheus &
-   23  cd
-   24  wget https://dl.grafana.com/oss/release/grafana_6.2.0-beta1_amd64.deb; dpkg -i grafana_6.2.0-beta1_amd64.deb
-   25  ls
-   26  rm -f grafana_6.2.0-beta1_amd64.deb
-   27  yum install -y https://dl.grafana.com/oss/release/grafana-9.5.0-1.x86_64.rpm
-   28  systemctl status grafana
-   29  systemctl status grafana-server
-   30  systemctl enable grafana-server --now
-   31  systemctl status grafana-server
-   32  var="some_metric 3.14"
-   33  curl -X POST -H  "Content-Type: text/plain" --data "$var" http://152.69.224.148:9091/metrics/job/top/instance/machine
-   34  echo "some_metric 3.14" | curl --data-binary @- http://pushgateway.example.org:9091/metrics/job/some_job
-   35  echo "some_metric 3.14" | curl --data-binary @- http://127.0.0.1:9091/metrics/job/some_job
-   36  echo "some_metric 3.14" | curl --data-binary @- http://152.69.224.148:9091/metrics/job/some_job
-   37  echo "cpu_usage{process="[kthreadd]", pid="2"} 0.0" | curl --data-binary @- http://152.69.224.148:9091/metrics/job/some_job
-   38  echo "cpu_usage{process=\"[kthreadd]\", pid=\"2\"} 0.0" | curl --data-binary @- http://152.69.224.148:9091/metrics/job/some_job
-   39  echo "cpu_usage{process=\"[kthreadd]\", pid=\"2\"} 0.0cpu_usage{process=\"[kthreadd]\", pid=\"3\"} 0.1" | curl --data-binary @- http://152.69.224.148:9091/metrics/job/some_job
-   40  echo "cpu_usage{process=\"[kthreadd]\", pid=\"2\"} 0.0 cpu_usage{process=\"[kthreadd]\", pid=\"3\"} 0.1" | curl --data-binary @- http://152.69.224.148:9091/metrics/job/some_job
-   41  echo "cpu_usage{process=\"[kthreadd]\", pid=\"2\"} 0.0\r\ncpu_usage{process=\"[kthreadd]\", pid=\"3\"} 0.1" | curl --data-binary @- http://152.69.224.148:9091/metrics/job/some_job
-   42  ps aux
-   43  history
+根据需要，禁用操作系统防火墙
 
+```
+[root@monitor-processes ~] systemctl disable firewalld
+[root@monitor-processes ~] systemctl stop firewalld
+```
+
+安装pushgateway
+
+```
+[root@monitor-processes ~] wget https://github.com/prometheus/pushgateway/releases/download/v0.8.0/pushgateway-0.8.0.linux-amd64.tar.gz
+[root@monitor-processes ~] tar xvzf pushgateway-0.8.0.linux-amd64.tar.gz
+[root@monitor-processes ~] cd pushgateway-0.8.0.linux-amd64/
+[root@monitor-processes pushgateway-0.8.0.linux-amd64]# ./pushgateway &
+```
+
+安装prometheus
+
+```
+[root@monitor-processes ~] wget https://github.com/prometheus/prometheus/releases/download/v2.9.2/prometheus-2.9.2.linux-amd64.tar.gz
+[root@monitor-processes ~] tar xvzf prometheus-2.9.2.linux-amd64.tar.gz
+[root@monitor-processes ~] cd prometheus-2.9.2.linux-amd64/
+[root@monitor-processes prometheus-2.9.2.linux-amd64]# cat prometheus.yml
+# my global config
+global:
+  scrape_interval:     1s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+    - targets: ['localhost:9090', 'localhost:9091']
+
+[root@monitor-processes prometheus-2.9.2.linux-amd64]# ./prometheus &
+```
+
+安装Grafana
+
+```
+[root@monitor-processes ~]# yum install -y https://dl.grafana.com/oss/release/grafana-9.5.0-1.x86_64.rpm
+[root@monitor-processes ~]# systemctl status grafana-server
+[root@monitor-processes ~]# systemctl enable grafana-server --now
+[root@monitor-processes ~]# systemctl status grafana-server
+
+[root@monitor-processes ~]# echo "some_metric 3.14" | curl --data-binary @- http://pushgateway.example.org:9091/metrics/job/some_job
+```
+
+在目标主机上部署监控进程CPU使用情况的采集程序
+
+```
 [root@bg001 ~]# cat /opt/better-top
 #!/bin/bash
 
@@ -59,4 +84,23 @@ do
   cat $output | curl --data-binary @-  http://152.69.224.148:9091/metrics/job/top/instance/machine
 done
 
+[root@bg001 ~]# chmod u+x /opt/better-top
+
+[root@bg001 ~]# cat /etc/systemd/system/script_daemon.service
+[Unit]
+Description=Script Daemon
+
+[Service]
+Type=simple
+ExecStart=/opt/better-top
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+
 ```
+
+
+效果：
+
+
