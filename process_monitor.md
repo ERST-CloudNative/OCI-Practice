@@ -1,6 +1,11 @@
 ## 进程监控
 
 
+进程监控架构示意图
+
+![image](https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/383710d3-7699-425e-a327-e48e4d5bc184)
+
+
 根据需要，禁用操作系统防火墙
 
 ```
