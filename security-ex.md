@@ -61,5 +61,5 @@ systemd-private-6e3a276b6c024c0d941e659b236eb4a7-unified-monitoring-agent.servic
 ```
 4. 调整防火墙配置
 
-建议仅仅开启需要对外暴露的端口，而不是暴露全部端口。
+建议仅开启需要对外暴露的端口，而不是暴露全部端口。
 
