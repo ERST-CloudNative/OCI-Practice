@@ -1,6 +1,7 @@
 
 ## Ubuntu开机启动程序配置
 
+> Ubuntu 18.06
 
 1. 创建systemd服务
 
