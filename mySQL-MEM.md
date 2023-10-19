@@ -1,5 +1,5 @@
 
-## MySQL Enterprise Monitor部署
+## MySQL Enterprise Monitor部署示例
 
 > Oracle Lunix 8
 
