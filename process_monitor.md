@@ -109,9 +109,11 @@ WantedBy=default.target
 
 <img width="955" alt="1690883515907" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/cafd38d1-76e1-40ce-9bff-a39ed89cb28e">
 
+
 访问Prometheus：
 
 <img width="638" alt="1690883605300" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/e607bec1-244f-4f09-a809-b5715819232d">
+
 
 
 
