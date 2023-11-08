@@ -17,6 +17,16 @@ root@test003:~# redis-cli --tls -h amaaaaasaapyx7sfqaaseeembg3p3jzvakcgtaspweq-p
 amaaaaaapyx7sfaswjv3bmre5as3fheeecasjzvakcgtsasqpweq-p.redis.ap-chuncheon-1.oci.oraclecloud.com:6379> 
 ```
 
+如果没有使用--tls，则会遇到以下异常情况，默认服务器端已经开启TLS
+
+<img width="962" alt="1699438566090" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/1e1d5afe-7e5a-4ba3-8a1c-4973675dfae1">
+
+```
+[root@hy redis-7.0.14]# redis-cli -h amaaadfdfacybyfddfddrvqm6lvsjdeoh4ycdfdfdsdrfydrxrar2nrq-r.redis.ap-chuncheon-1.oci.o
+amaaadfdfdfdfdm6lvsjdeoh4yddfdcxcdfdfydrxrar2nrq-r.rdfis.ap-chuncheon-1.oci.oraclecloud.com:6379> scan
+Error: Connection reset by peer
+```
+
 接下来对redis进行读写操作，再详细看下抓包信息
 
 ```
