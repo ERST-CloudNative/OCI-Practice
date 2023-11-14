@@ -114,16 +114,71 @@ Redis 排序集类似于 Redis 集，即非重复的字符串集合。不同之�
 
 ```
 
+### 3. Redis命令
 
+1. 服务器连接
 
+```
+$ redis-cli -h host -p port -a password
+```
 
+2. redids keys
 
+创建、删除、检查键是否存在
 
+```
+> set a 123
+OK
+> del a
+(integer) 1
+> exists a
+(integer) 0
 
+```
 
+设置键有3秒的到期时间
 
+```
+> set b 123
+OK
+> exists b
+(integer) 1
+> expire b 3
+(integer) 1
+> exists b
+(integer) 0
 
+```
 
+设置到期时间，不断查询余下的时间，然后中途移除键的到期时间
+
+```
+> set c 123
+OK
+> expire c 60
+(integer) 1
+> ttl c
+(integer) 57
+> ttl c
+(integer) 55
+> ttl c
+(integer) 53
+> type c
+string
+> ttl c
+(integer) 25
+> pttl c
+(integer) 20223
+> ttl c
+(integer) 16
+> persist c
+(integer) 1
+> ttl c
+(integer) -1
+
+```
+
+3. 字符串
 
 
 
