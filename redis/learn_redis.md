@@ -402,9 +402,98 @@ OK
 
 ```
 
+6. 集合
+
+Redis 的 Set 是 String 类型的无序集合。集合成员是唯一的，这就意味着集合中不能出现重复的数据。
+
+集合对象的编码可以是 intset 或者 hashtable。
+
+Redis 中集合是通过哈希表实现的，所以添加，删除，查找的复杂度都是 O(1)。
+
+集合中最大的成员数为 232 - 1 (4294967295, 每个集合可存储40多亿个成员)。
+
+```
+# 向集合添加一个或多个成员
+> sadd s1 redis
+(integer) 1
+> sadd s1 mogodb
+(integer) 1
+> sadd s1 mysql
+(integer) 1
+> sadd s1 mysql
+(integer) 0
+
+# 返回集合中的所有成员
+> smembers s1
+1) "mogodb"
+2) "mysql"
+3) "redis"
+
+# 获取集合的成员数
+> scard s1
+(integer) 3
 
 
+> sadd s2 redis
+(integer) 1
+> sadd s2 pgsql
+(integer) 1
+> sadd s2 docker
+(integer) 1
 
+# 返回第一个集合与其他集合之间的差异。
+> sdiff s1 s2
+1) "mogodb"
+2) "mysql"
+
+# 返回给定所有集合的交集
+> sinter s1 s2
+1) "redis"
+
+# 判断 member 元素是否是集合 key 的成员
+> sismember s1 redis
+(integer) 1
+
+# 移除并返回集合中的一个随机元素
+> spop s1
+"mogodb"
+> smembers s1
+1) "mysql"
+2) "redis"
+
+# 返回集合中一个或多个随机数
+> srandmember s2
+"redis"
+> srandmember s2
+"redis"
+> srandmember s2
+"docker"
+> srandmember s2
+"redis"
+
+# 移除集合中一个或多个成员
+> srem s1 mysql
+(integer) 1
+> smembers s1
+1) "redis"
+
+# 返回所有给定集合的并集
+> sunion s1 s2
+1) "pgsql"
+2) "docker"
+3) "redis"
+
+# 迭代集合中的元素
+> sscan s2 0
+1) "0"
+2) 1) "pgsql"
+   2) "docker"
+   3) "redis"
+> sscan s2 0 match "d*"
+1) "0"
+2) 1) "docker"
+
+```
 
 
 
