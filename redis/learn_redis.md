@@ -181,6 +181,69 @@ string
 
 3. 字符串
 
+```
+> set ab 123456
+OK
 
+# 获取长度
+> strlen ab
+(integer) 6
+> set cnt 12
+OK
+# 对整数型字符串自增
+> incr cnt
+(integer) 13
+> incr cnt
+(integer) 14
+> get cnt
+"14"
+# 对整数型字符串自减
+> decr cnt
+(integer) 13
+> decr cnt
+(integer) 12
+> get cnt
+"12"
+
+# 对整数型字符串自增，步长为2
+> incrby cnt 2
+(integer) 14
+> incrby cnt 3
+(integer) 17
+> get cnt
+"17"
+
+# 对整数型字符串自减，步长为3
+> decrby cnt 3
+(integer) 14
+> decrby cnt 2
+(integer) 12
+> get cnt
+"12"
+> set a1 2
+OK
+
+# 添加字符串
+> append a1 3
+(integer) 2
+> get a1
+"23"
+
+# 同时获取多个键值
+> mget a1 cnt
+1) "23"
+2) "12"
+
+# 设置键值，并返回上一次的值
+> getset a1 66
+"23"
+
+> set b1 1234567890
+OK
+# 获取字符串数组的指定序列
+> getrange b1 1 5
+"23456"
+
+```
 
 
