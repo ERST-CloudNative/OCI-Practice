@@ -495,7 +495,158 @@ Redis 中集合是通过哈希表实现的，所以添加，删除，查找的�
 
 ```
 
+7. 有序集合
 
+Redis 有序集合和集合一样也是 string 类型元素的集合,且不允许重复的成员。
+
+不同的是每个元素都会关联一个 double 类型的分数。redis 正是通过分数来为集合中的成员进行从小到大的排序。
+
+有序集合的成员是唯一的,但分数(score)却可以重复。
+
+集合是通过哈希表实现的，所以添加，删除，查找的复杂度都是 O(1)。 集合中最大的成员数为 232 - 1 (4294967295, 每个集合可存储40多亿个成员)。
+
+```
+# 向有序集合添加一个或多个成员，或者更新已存在成员的分数
+> zadd z1 1 redis
+(integer) 1
+> zadd z1 2 mongodb
+(integer) 1
+> zadd z1 3 mysql
+(integer) 1
+> zadd z1 3 mysql
+(integer) 0
+> zadd z1 4 mysql
+(integer) 0
+> zadd z1 3 pgsql
+(integer) 1
+
+# 通过索引区间返回有序集合指定区间内的成员
+> zrange z1 0 10 withscores
+1) "redis"
+2) "1"
+3) "mongodb"
+4) "2"
+5) "pgsql"
+6) "3"
+7) "mysql"
+8) "4"
+
+
+> zadd z2 1 redis
+(integer) 1
+> zadd z2 2 mongodb
+(integer) 1
+> zadd z2 3 mysql
+(integer) 1
+> zrange z2 0 10 withscores
+1) "redis"
+2) "1"
+3) "mongodb"
+4) "2"
+5) "mysql"
+6) "3"
+> zadd z2 4 mysql
+(integer) 0
+> zrange z2 0 10 withscores
+1) "redis"
+2) "1"
+3) "mongodb"
+4) "2"
+5) "mysql"
+6) "4"
+
+# 获取有序集合的成员数
+> zcard z1
+(integer) 4
+
+# 计算在有序集合中指定区间分数的成员数
+> zcount z1 2 4
+(integer) 3
+> zrange z1 0 10 withscores
+1) "redis"
+2) "1"
+3) "mongodb"
+4) "2"
+5) "pgsql"
+6) "3"
+7) "mysql"
+8) "4"
+
+# 有序集合中对指定成员的分数加上增量 increment
+> zincrby z1 2 "pgsql"
+"5"
+> zrange z1 0 10 withscores
+1) "redis"
+2) "1"
+3) "mongodb"
+4) "2"
+5) "mysql"
+6) "4"
+7) "pgsql"
+8) "5"
+
+# 对于一个所有成员的分值都相同的有序集合键key来说，这个命令会返回该集合中，成员介于min和max范围内的元素数量
+> zlexcount z1 - +
+(integer) 4
+> zadd test10 0 apple
+(integer) 1
+> zadd test10 0 redis
+(integer) 1
+> zadd test10 0 org
+(integer) 1
+> zadd test10 0 zoo
+(integer) 1
+> zlexcount test10 "[a" "[z"
+(integer) 3
+> zlexcount test10 "[a" "[zoo"
+(integer) 4
+> zlexcount test10 "[b" "[zoo"
+(integer) 3
+> zlexcount test10 "[o" "[zoo"
+(integer) 3
+> zlexcount test10 "[oz" "[zoo"
+(integer) 2
+
+
+> zrange  z1 2 4
+1) "mysql"
+2) "pgsql"
+
+# 返回有序集合中指定成员的索引
+> zrank z1 mysql
+(integer) 2
+> zrange z1 0 10
+1) "redis"
+2) "mongodb"
+3) "mysql"
+4) "pgsql"
+
+# 移除有序集合中的一个或多个成员
+> zrem z1 mysql
+(integer) 1
+> zrange z1 0 10
+1) "redis"
+2) "mongodb"
+3) "pgsql"
+
+# 返回有序集中指定区间内的成员，通过索引，分数从高到低
+> zrevrange z1 0 10
+1) "pgsql"
+2) "mongodb"
+3) "redis"
+
+# 返回有序集合中指定成员的排名，有序集成员按分数值递减(从大到小)排序
+> zrevrank z1 redis
+(integer) 2
+
+# 迭代有序集合中的元素（包括元素成员和元素分值）
+> zscan z1 0 match "r*"
+1) "0"
+2) 1) "redis"
+   2) "1"
+
+
+```
 
 
 
