@@ -246,4 +246,85 @@ OK
 
 ```
 
+4. 哈希
 
+```
+# 单个字段哈希键值
+> hset oci name "oracle cloud infra"
+(integer) 1
+
+> hget oci name
+"oracle cloud infra"
+
+# 多个字段哈希键值
+> hmset h1 name "news"  descriptions "good news" likes 20 vistors 10000
+OK
+> hgetall h1
+1) "name"
+2) "news"
+3) "descriptions"
+4) "good news"
+5) "likes"
+6) "20"
+7) "vistors"
+8) "10000"
+
+# 检查字段是否存在
+> HEXISTS h1 name
+(integer) 1
+> HEXISTS h1 likes
+(integer) 1
+
+# 删除字段
+> hdel h1 likes
+(integer) 1
+> hgetall h1
+1) "name"
+2) "news"
+3) "descriptions"
+4) "good news"
+5) "vistors"
+6) "10000"
+
+# 获取哈希表中的所有字段
+> hkeys h1
+1) "name"
+2) "descriptions"
+3) "vistors"
+
+# 获取哈希表的长度
+> hlen h1
+(integer) 3
+
+# 获取哈希表中指定字段的值
+> hmget h1 name vistors
+1) "news"
+2) "10000"
+
+# 设置字段
+> hsetnx h1 likes 200
+(integer) 1
+> hkeys h1
+1) "name"
+2) "descriptions"
+3) "vistors"
+4) "likes"
+
+# 迭代哈希表中的键值对，默认从0开始。
+> hscan h1 0
+1) "0"
+2) 1) "name"
+   2) "news"
+   3) "descriptions"
+   4) "good news"
+   5) "vistors"
+   6) "10000"
+   7) "likes"
+   8) "200"
+
+# 返回指定模式匹配的字段
+> hscan h1 0 match "n*"
+1) "0"
+2) 1) "name"
+   2) "news"
+```
