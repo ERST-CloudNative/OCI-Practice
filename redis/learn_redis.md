@@ -328,3 +328,95 @@ OK
 2) 1) "name"
    2) "news"
 ```
+
+
+5. 列表
+
+Redis列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素到列表的头部（左边）或者尾部（右边）
+
+```
+# 添加元素到列表
+> lpush mid redis
+(integer) 1
+> lpush mid mongodb
+(integer) 2
+> lpush mid mysql
+(integer) 3
+
+# 获取列表指定范围内的元素
+> lrange mid 0 10
+1) "mysql"
+2) "mongodb"
+3) "redis"
+
+# 移出并获取列表的第一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。
+> blpop mid 3
+1) "mid"
+2) "mysql"
+
+# 通过索引获取列表中的元素
+> lindex mid 0
+"mongodb"
+> lindex mid 1
+"redis"
+
+# 在列表的元素前或者后插入元素
+> linsert mid before redis pgsql
+(integer) 3
+> lrange mid 0 10
+1) "mongodb"
+2) "pgsql"
+3) "redis"
+> lindex mid 0
+"mongodb"
+> lindex mid 1
+"pgsql"
+> lindex mid 2
+"redis"
+> llen mid
+(integer) 3
+
+# 通过索引设置列表元素的值
+> lset mid 1 postgresql
+OK
+> lrange mid 0 10
+1) "mongodb"
+2) "postgresql"
+3) "redis"
+
+# 移除列表的最后一个元素，返回值为移除的元素。
+> rpop mid
+"redis"
+> lrange mid 0 10
+1) "mongodb"
+2) "postgresql"
+
+# 在列表中添加一个或多个值到列表尾部
+> rpush mid docker k8s
+(integer) 4
+> lrange mid 0 10
+1) "mongodb"
+2) "postgresql"
+3) "docker"
+4) "k8s"
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
