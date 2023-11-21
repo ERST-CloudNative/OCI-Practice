@@ -1274,9 +1274,58 @@ v4
 在 Redis 重启的时候，可以先加载 RDB 的内容，然后再重放增量 AOF 日志就可以完全替代之前的AOF 全量文件重放，因此重启效率大幅得到提升。
 
 
+15. Redis 性能测试
 
+Redis 性能测试是通过同时执行多个命令实现的。
 
+```
+[root@redis01 ~]# redis-benchmark -n 10000 -q
+PING_INLINE: 44444.45 requests per second
+PING_BULK: 43290.04 requests per second
+SET: 50000.00 requests per second
+GET: 45045.04 requests per second
+INCR: 45662.10 requests per second
+LPUSH: 45871.56 requests per second
+RPUSH: 45454.55 requests per second
+LPOP: 45662.10 requests per second
+RPOP: 47619.05 requests per second
+SADD: 44843.05 requests per second
+HSET: 45662.10 requests per second
+SPOP: 43859.65 requests per second
+LPUSH (needed to benchmark LRANGE): 46082.95 requests per second
+LRANGE_100 (first 100 elements): 33670.04 requests per second
+LRANGE_300 (first 300 elements): 18382.35 requests per second
+LRANGE_500 (first 450 elements): 14598.54 requests per second
+LRANGE_600 (first 600 elements): 12239.90 requests per second
+MSET (10 keys): 45248.87 requests per second
 
+# -n 指定请求数,-c 指定并发连接数，-q 强制退出 redis,仅显示 query/sec 值
+[root@redis01 ~]# redis-benchmark -n 100000 -c 100 -q
+PING_INLINE: 44822.95 requests per second
+PING_BULK: 43459.36 requests per second
+SET: 45351.48 requests per second
+GET: 43706.29 requests per second
+INCR: 45495.91 requests per second
+LPUSH: 45330.91 requests per second
+RPUSH: 45620.44 requests per second
+LPOP: 45106.00 requests per second
+RPOP: 45289.86 requests per second
+SADD: 43668.12 requests per second
+HSET: 45167.12 requests per second
+SPOP: 43956.04 requests per second
+LPUSH (needed to benchmark LRANGE): 45475.22 requests per second
+LRANGE_100 (first 100 elements): 33422.46 requests per second
+LRANGE_300 (first 300 elements): 18625.44 requests per second
+LRANGE_500 (first 450 elements): 14863.26 requests per second
+LRANGE_600 (first 600 elements): 12192.15 requests per second
+MSET (10 keys): 45106.00 requests per second
+
+# -t	仅运行以逗号分隔的测试命令列表。
+[root@redis01 ~]# redis-benchmark -h 127.0.0.1 -p 6379 -t set,lpush -n 10000 -q
+SET: 51020.41 requests per second
+LPUSH: 46082.95 requests per second
+
+```
 
 
 
