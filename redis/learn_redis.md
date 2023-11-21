@@ -984,3 +984,302 @@ db1:keys=1,expires=0,avg_ttl=0
 
 ```
 
+
+13. Redis GEO
+
+
+Redis GEO 主要用于存储地理位置信息，并对存储的信息进行操作，该功能在 Redis 3.2 版本新增。
+
+Redis GEO 操作方法有：
+- geoadd：添加地理位置的坐标。
+- geopos：获取地理位置的坐标。
+- geodist：计算两个位置之间的距离。
+- georadius：根据用户给定的经纬度坐标来获取指定范围内的地理位置集合。
+- georadiusbymember：根据储存在位置集合里面的某个地点获取指定范围内的地理位置集合。
+- geohash：返回一个或多个位置对象的 geohash 值。
+
+
+```
+127.0.0.1:6379> GEOADD Sicily 13.361389 38.115556 "Palermo" 15.087269 37.502669 "Catania"
+(integer) 2
+
+127.0.0.1:6379> GEODIST Sicily Palermo Catania
+"166274.1516"
+127.0.0.1:6379> GEORADIUS Sicily 15 37 100 km
+1) "Catania"
+127.0.0.1:6379> GEORADIUS Sicily 15 37 500 km
+1) "Palermo"
+2) "Catania"
+127.0.0.1:6379> GEOPOS Sicily Catania
+1) 1) "15.08726745843887329"
+   2) "37.50266842333162032"
+127.0.0.1:6379> GEOHASH Sicily Palermo Catania
+1) "sqc8b49rny0"
+2) "sqdtr74hyu0"
+
+```
+
+
+14. Redis 数据备份
+
+Redis 提供了 RDB 和 AOF 两种持久化方式，默认开启的是RDB，如果需要AOF，需要手动修改配置文件进行开启。
+
+RDB：是一种对Redis存在内存中的数据周期性的持久化机制，将内存中的数据以快照的形式硬盘，实质上是fork了一个子进程在执行数据存储，采用的是二进制压缩的存储模式。
+AOF：是以文本日志的形式记录Redis的每一个写入、删除请求（查询请求不处理），它是以追加的方式（append-only）写入，没有磁盘寻址的开销，所以写入速度非常快（类似mysql的binlog）。
+
+RDB适合做冷备，AOF适合做热备。
+
+在生产环境中，通常是冷备和热备一起上，RDB中bgsave做全量持久化，AOF做增量持久化，在redis重启的时候，使用rdb持久化的文件重新构建内存，再使用aof恢复最近操作数据，从而实现完整的服务到重启之前的状态。
+
+（单独用RDB你会丢失很多数据，你单独用AOF，你数据恢复没RDB来的快，所以在生产环境中，第一时间用RDB恢复，然后AOF做数据补全，冷备热备一起上，才是互联网时代一个高健壮性系统的王道。）
+
+14.1 RDB方式备份与恢复
+
+```
+# 执行数据备份，然后删除数据
+127.0.0.1:6379> set k1 v1
+OK
+127.0.0.1:6379> set k2 v2
+OK
+127.0.0.1:6379> save
+OK
+127.0.0.1:6379> config get dir
+1) "dir"
+2) "/var/lib/redis"
+
+# 另开一个终端操作
+[root@redis01 redis]# cp dump.rdb /tmp/
+
+127.0.0.1:6379> del k1 k2
+(integer) 2
+127.0.0.1:6379> keys *
+(empty list or set)
+127.0.0.1:6379> exit
+
+# 停止redis服务
+[root@redis01 ~]# systemctl stop redis
+# 将备份数据放在redis运行目录
+[root@redis01 redis]# cp /tmp/dump.rdb ./
+# 重启redis服务
+[root@redis01 ~]# systemctl start redis
+
+# 验证数据恢复
+[root@redis01 ~]# redis-cli
+
+127.0.0.1:6379> keys *
+1) "k1"
+2) "k2"
+127.0.0.1:6379> get k1
+"v1"
+```
+
+命令行版本
+
+```
+# 查看已有数据
+[root@redis01 ~]# redis-cli
+127.0.0.1:6379> keys *
+1) "k2"
+2) "k1"
+127.0.0.1:6379> exit
+# 启动后rbd后台备份进程
+[root@redis01 ~]# redis-cli bgsave
+Background saving started
+
+# rdb_bgsave_in_progress：如果值为1，表示后台保存正在进行中；如果值为0，表示后台保存已完成。
+while [ "$(redis-cli info persistence | grep 'rdb_bgsave_in_progress:')" = "rdb_bgsave_in_progress:1" ]; do
+    sleep 1
+done
+
+[root@redis01 ~]# redis-cli info persistence
+# Persistence
+loading:0
+rdb_changes_since_last_save:0
+rdb_bgsave_in_progress:0
+rdb_last_save_time:1700562053
+rdb_last_bgsave_status:ok
+rdb_last_bgsave_time_sec:-1
+rdb_current_bgsave_time_sec:-1
+rdb_last_cow_size:0
+aof_enabled:0
+aof_rewrite_in_progress:0
+aof_rewrite_scheduled:0
+aof_last_rewrite_time_sec:-1
+aof_current_rewrite_time_sec:-1
+aof_last_bgrewrite_status:ok
+aof_last_write_status:ok
+aof_last_cow_size:0
+
+# 拷贝备份数据
+[root@redis01 redis]# cp dump.rdb ~/
+
+# 模拟数据操作
+[root@redis01 ~]# redis-cli
+127.0.0.1:6379> keys *
+1) "k2"
+2) "k1"
+127.0.0.1:6379> del k1 k2
+(integer) 2
+127.0.0.1:6379> exit
+
+# 模拟故障
+[root@redis01 ~]# systemctl stop redis
+
+# 将备份数据拷贝到redis运行目录
+[root@redis01 redis]# cp ~/dump.rdb ./
+
+# 启动redis恢复数据
+[root@redis01 ~]# systemctl start redis
+
+# 验证数据恢复
+[root@redis01 ~]# redis-cli get k1
+"v1"
+
+```
+
+14.2 AOF方式备份与恢复
+
+
+```
+# 禁止RDB,启用AOF
+[root@redis01 ~]# vi /etc/redis.conf
+...
+appendonly yes
+
+save ""
+
+#save 900 1
+#save 300 10
+#save 60 10000
+...
+
+[root@redis01 ~]# systemctl restart redis
+[root@redis01 ~]# redis-cli
+127.0.0.1:6379> keys *
+(empty list or set)
+127.0.0.1:6379> set a 1
+OK
+127.0.0.1:6379> set b 2
+OK
+
+# 开启备份
+127.0.0.1:6379> BGREWRITEAOF
+Background append only file rewriting started
+127.0.0.1:6379> config get dir
+1) "dir"
+2) "/var/lib/redis"
+
+[root@redis01 redis]# redis-cli info persistence
+# Persistence
+loading:0
+rdb_changes_since_last_save:2
+rdb_bgsave_in_progress:0
+rdb_last_save_time:1700563139
+rdb_last_bgsave_status:ok
+rdb_last_bgsave_time_sec:-1
+rdb_current_bgsave_time_sec:-1
+rdb_last_cow_size:0
+aof_enabled:1
+aof_rewrite_in_progress:0
+aof_rewrite_scheduled:0
+aof_last_rewrite_time_sec:0
+aof_current_rewrite_time_sec:-1
+aof_last_bgrewrite_status:ok
+aof_last_write_status:ok
+aof_last_cow_size:286720
+aof_current_size:107
+aof_base_size:107
+aof_pending_rewrite:0
+aof_buffer_length:0
+aof_rewrite_buffer_length:0
+aof_pending_bio_fsync:0
+aof_delayed_fsync:0
+[root@redis01 redis]# cp appendonly.aof ~/
+
+
+127.0.0.1:6379> del a b
+(integer) 2
+127.0.0.1:6379> keys *
+(empty list or set)
+127.0.0.1:6379> exit
+[root@redis01 ~]# systemctl stop redis
+# 恢复备份数据，并验证
+[root@redis01 redis]# cp ~/appendonly.aof ./
+
+[root@redis01 ~]# systemctl start redis
+
+[root@redis01 ~]# redis-cli
+127.0.0.1:6379> keys *
+1) "b"
+2) "a"
+
+```
+
+
+14.3 混合持久化
+
+混合持久化本质是通过 AOF 后台重写（bgrewriteaof 命令）完成的，不同的是当开启混合持久化时，fork 出的子进程先将当前全量数据以 RDB 方式写入新的 AOF 文件，然后再将 AOF 重写缓冲区（aof_rewrite_buf_blocks）的增量命令以 AOF 方式写入到文件，写入完成后通知主进程将新的含有 RDB 格式和 AOF 格式的 AOF 文件替换旧的的 AOF 文件。
+
+```
+# 在以上实验的基础上修改
+[root@redis01 ~]# vi /etc/redis.conf
+# save ""
+
+save 900 1
+save 300 10
+save 60 10000
+[root@redis01 ~]# systemctl restart redis
+
+[root@redis01 ~]# redis-cli set k1 v1
+OK
+[root@redis01 ~]# redis-cli set k2 v2
+OK
+[root@redis01 ~]# redis-cli set k3 v3
+OK
+
+# 查看混合持久化是否开启
+[root@redis01 ~]# redis-cli config get aof-use-rdb-preamble
+1) "aof-use-rdb-preamble"
+2) "yes"
+
+# 执行备份
+[root@redis01 ~]# redis-cli bgrewriteaof
+Background append only file rewriting started
+[root@redis01 ~]# redis-cli set k4 v4
+OK
+[root@redis01 ~]# redis-cli set k5 v5
+OK
+
+
+# 其中的乱码区域即为RDB二进制备份数据，后面AOF增量记录
+[root@redis01 redis]# tail -f appendonly.aof
+REDIS0009▒      redis-ver5.0.3▒
+▒edis-bits▒@▒ctime▒▒\eused-mem¨
+aof-preamble▒▒▒k1v1k3v3k2v2▒▒▒D=Oxterm-256colorxterm-256color*2
+$6
+SELECT
+$1
+0
+*3
+$3
+set
+$2
+k4
+$2
+v4
+^C
+
+```
+
+在 Redis 重启的时候，可以先加载 RDB 的内容，然后再重放增量 AOF 日志就可以完全替代之前的AOF 全量文件重放，因此重启效率大幅得到提升。
+
+
+
+
+
+
+
+
+
+
+
