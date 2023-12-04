@@ -4,6 +4,7 @@
 
 ### 1. 网络规划
 
+
 ```
 public subnet(Node Pool/API): 10.0.0.0/18(可容纳16000+容器)
 Service LB subnet： 10.0.64.0/18
@@ -11,6 +12,7 @@ private subnet:	10.0.128.0/18
 bussiness unit 01: 10.0.0.192/24(可选)
 bussiness unit 02: 10.0.0.193/24（可选）
 ```
+
 ### 2. VCN配置
 
 创建VCN
