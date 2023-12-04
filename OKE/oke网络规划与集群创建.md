@@ -51,6 +51,20 @@ bussiness unit 02: 10.0.0.193/24（可选）
 
 <img width="823" alt="1701694278107" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/437720f5-bff2-4547-875a-d28c3697179f">
 
+引导卷扩容后，需要在操作系统层面做相应的操作，这里使用cloud init脚本完成
+
+```
+#!/bin/bash
+curl --fail -H "Authorization: Bearer Oracle" -L0 http://169.254.169.254/opc/v2/instance/metadata/oke_init_script | base64 --decode >/var/run/oke-init.sh
+bash /var/run/oke-init.sh
+sudo -i
+dd iflag=direct if=/dev/oracleoci/oraclevda of=/dev/null count=1
+echo "1" | sudo tee /sys/class/block/`readlink /dev/oracleoci/oraclevda | cut -d'/' -f 2`/device/rescan
+growpart /dev/sda 3
+lvextend -l +100%FREE  /dev/ocivolume/root
+xfs_growfs /dev/ocivolume/root
+```
+
 <img width="958" alt="1701694331319" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/87c5e5b5-152d-45d0-9c15-05e02b4052fe">
 
 <img width="867" alt="1701694362814" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/c29abd75-2bb1-482e-aaec-25a745306295">
@@ -58,5 +72,97 @@ bussiness unit 02: 10.0.0.193/24（可选）
 <img width="960" alt="1701694399763" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/df7401e9-ff82-4a70-a6c8-293e0a98e16c">
 
 
+### 4. OKE集群验证
 
+1. 验证节点池全部就绪
+
+<img width="950" alt="1701695427140" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/ed58e790-ac6c-4cb2-b856-0b74c9cc3aff">
+
+2. 验证节点存储扩容是否配置生效
+
+<img width="766" alt="1701695486715" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/4940376c-89bb-4562-bc2b-f79c0bac8390">
+
+3. 验证集群功能是否符合预期
+
+这里集群创建了9个node节点，查看节点是否全部ready
+
+```
+longfei_re@cloudshell:~ (ap-chuncheon-1)$ kubectl get nodes
+NAME          STATUS   ROLES   AGE     VERSION
+10.0.11.169   Ready    node    7m6s    v1.27.2
+10.0.17.232   Ready    node    7m55s   v1.27.2
+10.0.2.11     Ready    node    7m      v1.27.2
+10.0.2.192    Ready    node    7m13s   v1.27.2
+10.0.21.151   Ready    node    7m12s   v1.27.2
+10.0.23.99    Ready    node    7m9s    v1.27.2
+10.0.4.229    Ready    node    7m57s   v1.27.2
+10.0.40.41    Ready    node    7m6s    v1.27.2
+10.0.41.114   Ready    node    8m3s    v1.27.2
+```
+
+创建nginx测试用例，9个副本，确认所有副本都可以正常调度到每个节点
+
+```
+longfei_re@cloudshell:~ (ap-chuncheon-1)$ cat test.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx
+spec:
+  replicas: 9
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+longfei_re@cloudshell:~ (ap-chuncheon-1)$ kubectl apply -f test.yaml 
+longfei_re@cloudshell:~ (ap-chuncheon-1)$ kubectl get pods -o wide
+NAME                        READY   STATUS    RESTARTS   AGE    IP            NODE          NOMINATED NODE   READINESS GATES
+my-nginx-57d84f57dc-7ld44   1/1     Running   0          106s   10.0.60.173   10.0.17.232   <none>           <none>
+my-nginx-57d84f57dc-8rjzl   1/1     Running   0          107s   10.0.52.4     10.0.40.41    <none>           <none>
+my-nginx-57d84f57dc-jprnf   1/1     Running   0          106s   10.0.5.41     10.0.2.11     <none>           <none>
+my-nginx-57d84f57dc-mp2r9   1/1     Running   0          106s   10.0.37.193   10.0.4.229    <none>           <none>
+my-nginx-57d84f57dc-pxjmq   1/1     Running   0          106s   10.0.14.234   10.0.23.99    <none>           <none>
+my-nginx-57d84f57dc-rzj5g   1/1     Running   0          106s   10.0.9.113    10.0.2.192    <none>           <none>
+my-nginx-57d84f57dc-sjqbj   1/1     Running   0          106s   10.0.12.236   10.0.21.151   <none>           <none>
+my-nginx-57d84f57dc-wjkhr   1/1     Running   0          106s   10.0.60.145   10.0.41.114   <none>           <none>
+my-nginx-57d84f57dc-wm6h4   1/1     Running   0          106s   10.0.11.24    10.0.11.169   <none>           <none>
+
+```
+
+### 5. OKE集群扩容验证
+
+将节点池的节点数量扩容到10个节点
+
+<img width="944" alt="1701695820807" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/3e7fdfc5-5eaa-4030-8107-866166f88dcf">
+
+验证节点创建成功
+
+<img width="950" alt="1701696124739" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/ef8646a8-37fe-414b-b338-36bfa56b3a91">
+
+```
+longfei_re@cloudshell:~ (ap-chuncheon-1)$ kubectl get nodes
+NAME          STATUS   ROLES   AGE    VERSION
+10.0.11.169   Ready    node    14m    v1.27.2
+10.0.17.232   Ready    node    15m    v1.27.2
+10.0.2.11     Ready    node    14m    v1.27.2
+10.0.2.192    Ready    node    15m    v1.27.2
+10.0.21.151   Ready    node    15m    v1.27.2
+10.0.23.99    Ready    node    15m    v1.27.2
+10.0.27.101   Ready    node    2m7s   v1.27.2
+10.0.4.229    Ready    node    15m    v1.27.2
+10.0.40.41    Ready    node    14m    v1.27.2
+10.0.41.114   Ready    node    15m    v1.27.2
+
+longfei_re@cloudshell:~ (ap-chuncheon-1)$ kubectl get nodes | grep 'Ready'| wc -l
+10
+```
 
