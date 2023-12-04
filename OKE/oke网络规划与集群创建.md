@@ -1,5 +1,3 @@
-
-
 ## OKE网络规划与集群创建
 
 ### 1. 网络规划
@@ -48,8 +46,6 @@ bussiness unit 02: 10.0.0.193/24（可选）
 <img width="900" alt="1701693973180" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/ea0e86d5-d907-4fde-b288-7d4c341661a8">
 
 <img width="930" alt="1701694022603" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/fffdd8d5-393b-4fb6-b470-3ce90211f0e4">
-
-<img width="823" alt="1701694278107" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/437720f5-bff2-4547-875a-d28c3697179f">
 
 引导卷扩容后，需要在操作系统层面做相应的操作，这里使用cloud init脚本完成
 
