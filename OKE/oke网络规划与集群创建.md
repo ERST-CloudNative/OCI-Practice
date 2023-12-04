@@ -31,7 +31,7 @@ bussiness unit 02: 10.0.0.193/24（可选）
 
 <img width="620" alt="1701693665280" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/d435ec78-6d56-40ee-ab4a-504ba2c28d48">
 
-配置默认的安全列表，这里添加两天安全规则：
+配置默认的安全列表，这里添加两条安全规则：
 1. 允许节点间通信
 2. 允许访问master集群api端口
 
