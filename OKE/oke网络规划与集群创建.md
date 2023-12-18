@@ -57,13 +57,15 @@ VM_SUBNET_01_CIDR 10.0.76.0/24
 
 ### 3. OKE集群创建
 
-<img width="481" alt="1701693841224" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/1e4a9e04-0339-46fe-8286-4c4438f1df77">
+<img width="725" alt="1702886488062" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/05f8c43d-f585-433c-826e-9ebdd4f92a10">
 
-<img width="753" alt="1701693880663" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/86c27df3-5a4f-49be-a8eb-ed4ca4f1d089">
+<img width="825" alt="1702886542622" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/e74c5a5f-1c38-413d-935b-8c39eeed71b9">
 
-<img width="794" alt="1701693931930" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/f40a2c8b-184e-498b-9c9e-55015870abb9">
+<img width="884" alt="1702886647911" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/45f8af71-b860-484e-ad7d-393c10c36fe2">
 
-<img width="900" alt="1701693973180" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/ea0e86d5-d907-4fde-b288-7d4c341661a8">
+<img width="847" alt="1702886697977" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/5782a622-353b-4894-b9d1-26470a62ddb8">
+
+其中，节点个数和节点配置信息按需配置即可。
 
 <img width="930" alt="1701694022603" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/fffdd8d5-393b-4fb6-b470-3ce90211f0e4">
 
