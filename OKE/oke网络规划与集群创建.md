@@ -67,7 +67,8 @@ VM_SUBNET_01_CIDR 10.0.76.0/24
 
 其中，节点个数和节点配置信息按需配置即可。
 
-<img width="930" alt="1701694022603" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/fffdd8d5-393b-4fb6-b470-3ce90211f0e4">
+<img width="827" alt="1702886798269" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/f5ed290a-5cf1-4192-af3b-7c967c7fbf4f">
+
 
 引导卷扩容后，需要在操作系统层面做相应的操作，这里使用cloud init脚本完成
 
