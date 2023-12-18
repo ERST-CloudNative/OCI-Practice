@@ -17,15 +17,12 @@ VM_SUBNET_01_CIDR 10.0.76.0/24
 
 创建VCN
 
-<img width="481" alt="1701693246888" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/7ce8855a-a7ab-4e80-9adb-cb3e5ec6252a">
+<img width="823" alt="1702886273132" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/e1249d28-38d9-4252-b83d-69c4233a8ac9">
 
-<img width="657" alt="1701693370452" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/ffbbff70-60c9-48d6-b76e-8955c24485aa">
+创建所需的子网
 
-<img width="719" alt="1701693410269" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/dec047fe-593d-4cff-bf29-29e1b432ddee">
+<img width="941" alt="1702886346244" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/68901fd6-281a-4447-8d02-bf2c8c3e182a">
 
-创建所需的子网(Service LB subnet)
-
-<img width="901" alt="1701693610019" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/f3a571fc-f4fa-428f-a015-be9c5a8d67bf">
 
 其中，Security Lists可以新建或者使用默认的配置，这里选择默认配置
 
