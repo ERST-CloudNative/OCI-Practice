@@ -4,11 +4,11 @@
 
 
 ```
-public subnet(Node Pool/API): 10.0.0.0/18(可容纳16000+容器)
-Service LB subnet： 10.0.64.0/18
-private subnet:	10.0.128.0/18
-bussiness unit 01: 10.0.0.192/24(可选)
-bussiness unit 02: 10.0.0.193/24（可选）
+OKE_POD_SUBNET_CIDR  10.0.0.0/18
+OKE_NODE_SUBNET_CIDR  10.0.64.0/22
+OKE_API_SUBNET_CIDR  10.0.68.0/22
+OKE_SVCLB_SUBNET_CIDR 10.0.72.0/22
+VM_SUBNET_01_CIDR 10.0.76.0/24
 ```
 
 ### 2. VCN配置
@@ -43,6 +43,16 @@ bussiness unit 02: 10.0.0.193/24（可选）
 在默认的路由表中添加一条路由规则
 
 <img width="586" alt="1702879232118" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/5688d0d2-86f9-4b25-afd0-b669168ecc60">
+
+配置NAT网关和路由表
+
+<img width="634" alt="1702885910789" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/6ff48352-61c5-46fc-81a5-995a193325a6">
+
+新建路由表，并添加NAT规则
+
+<img width="579" alt="1702885969430" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/482cca1a-dd72-4067-bca0-b74c02066841">
+
+<img width="517" alt="1702886012285" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/10a7db69-3623-42d7-bba7-0ec566a38d9a">
 
 
 
@@ -171,5 +181,15 @@ NAME          STATUS   ROLES   AGE    VERSION
 
 longfei_re@cloudshell:~ (ap-chuncheon-1)$ kubectl get nodes | grep 'Ready'| wc -l
 10
+
+# 验证外网通信
+longfei_re@cloudshell:~ (ap-chuncheon-1)$ kubectl run tmp-shell --rm -i --tty --image nicolaka/netshoot
+...                                                                                                                                                                                                                                                                                                                  
+ tmp-shell  ~  ping google.com
+PING google.com (142.250.199.110) 56(84) bytes of data.
+64 bytes from nrt13s52-in-f14.1e100.net (142.250.199.110): icmp_seq=1 ttl=53 time=36.2 ms
+64 bytes from nrt13s52-in-f14.1e100.net (142.250.199.110): icmp_seq=2 ttl=53 time=35.7 ms
+64 bytes from nrt13s52-in-f14.1e100.net (142.250.199.110): icmp_seq=3 ttl=53 time=35.7 ms
+64 bytes from nrt13s52-in-f14.1e100.net (142.250.199.110): icmp_seq=4 ttl=53 time=35.7 ms
 ```
 
