@@ -13,6 +13,8 @@ VM_SUBNET_01_CIDR 10.0.76.0/24
 
 ### 2. VCN配置
 
+> 注意：以下子网配置，请按照上一步网络规划中的CIDR进行配置。
+
 创建VCN
 
 <img width="481" alt="1701693246888" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/7ce8855a-a7ab-4e80-9adb-cb3e5ec6252a">
