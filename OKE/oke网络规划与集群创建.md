@@ -35,6 +35,17 @@ bussiness unit 02: 10.0.0.193/24（可选）
 
 <img width="944" alt="1701693753666" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/03b32034-b179-4171-af24-0d8b51a561a6">
 
+
+配置IGW和路由表
+
+<img width="635" alt="1702879144875" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/0eba9a38-7a79-429c-b58f-b0424fb9cdb5">
+
+在默认的路由表中添加一条路由规则
+
+<img width="586" alt="1702879232118" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/5688d0d2-86f9-4b25-afd0-b669168ecc60">
+
+
+
 ### 3. OKE集群创建
 
 <img width="481" alt="1701693841224" src="https://github.com/ERST-CloudNative/OCI-Practice/assets/4653664/1e4a9e04-0339-46fe-8286-4c4438f1df77">
