@@ -41,7 +41,7 @@ NAME          STATUS   ROLES   AGE     VERSION
 
 ```
 
-# 在节点就地升级过程中，由于需要驱离原有节点上的pod，所以会导致短时间业务中断，所以建议选择合适的时间窗口进行操作。
+在节点就地升级过程中，由于需要驱离原有节点上的pod，所以会导致短时间业务中断，所以建议选择合适的时间窗口进行操作。
 
 ```
 [root@d01 ~]# while true; do curl -I  -X GET http://www.demo.io/; sleep 2; done
